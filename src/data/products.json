@@ -3,12 +3,13 @@
         "id": "1",
         "name": "Pediatric Tracheostomy Care Booklet",
         "price": 150000,
-        "description": "Comprehensive guide for parents on how to care for children with tracheostomy.",
+        "description": "Comprehensive bilingual guide (Bahasa & English) for parents caring for children with tracheostomy. Covers equipment, procedures, and emergency contacts.",
         "category": "Education",
-        "image": "/DonationDistributionInsta/C5dUfGfy1uS/2024-04-07_11-11-55_UTC_2.webp",
+        "image": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "https://drive.google.com/file/d/1LKwZJw3-zQR8ZxP2AkPW2kMaBgAvf2HK/view?usp=sharing",
+        "purchaseUrl": "https://drive.google.com/file/d/1LKwZJw3-zQR8ZxP2AkPW2kMaBgAvf2HK/view",
         "features": [
             "Bilingual (Bahasa & English)",
             "Parent-Contributed",
@@ -18,34 +19,128 @@
     },
     {
         "id": "2",
-        "name": "Replacement Cannula",
+        "name": "Pediatric Tracheostomy Tube – Shiley Neo",
         "price": 450000,
-        "description": "Standard size replacement cannula for pediatric tracheostomy tubes.",
-        "category": "Medical Supplies",
-        "image": "/DonationDistributionInsta/C78-H1dSMwZ/2024-06-08_11-14-59_UTC_10.webp",
+        "description": "Neonatal/pediatric-size Shiley tracheostomy tube with inner cannula. Soft, cuffless design for young patients, widely used in Indonesian paediatric hospitals.",
+        "category": "Tracheostomy Tubes",
+        "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "",
+        "purchaseUrl": "https://www.medicalexpo.com/prod/medtronic/product-70019-565786.html",
         "features": [
-            "Standard Size",
-            "Medical Grade",
-            "Pediatric Safe"
+            "Cuffless Design",
+            "Inner Cannula",
+            "Pediatric Size",
+            "Soft Material"
         ]
     },
     {
-        "id": "1772000836856",
-        "name": "Sterimar Nose Hygiene",
-        "price": 200,
-        "category": "Medical Supplies",
+        "id": "3",
+        "name": "Sterimar Baby Nasal Spray (100ml)",
+        "price": 185000,
+        "description": "Isotonic saline nasal spray specially formulated for babies and young children. Gently clears nasal congestion and supports daily nasal hygiene.",
+        "category": "Nasal Care",
+        "image": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&q=80",
         "status": "Available",
-        "image": "/Girly.png",
-        "description": "Isotonic saline solution for gentle nasal hygiene and daily nose care.",
         "inStock": true,
         "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=sterimar+baby",
         "features": [
-            "Isotonic Saline",
-            "Gentle Formula",
-            "Suitable for Children"
+            "Isotonic Formula",
+            "Zero Preservatives",
+            "Baby Safe",
+            "100ml"
+        ]
+    },
+    {
+        "id": "4",
+        "name": "Suction Machine – Portable Electric",
+        "price": 1250000,
+        "description": "Compact, rechargeable portable suction machine for airway secretion management. Essential for home care of tracheostomy patients. Includes 10 disposable catheters.",
+        "category": "Suction Equipment",
+        "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=portable+suction+machine+tracheostomy",
+        "features": [
+            "Rechargeable Battery",
+            "Portable Design",
+            "Adjustable Suction",
+            "Includes Catheters"
+        ]
+    },
+    {
+        "id": "5",
+        "name": "Pulse Oximeter – Pediatric Fingertip",
+        "price": 320000,
+        "description": "Non-invasive fingertip pulse oximeter for continuous SpO2 and heart rate monitoring in infants and children. Displays waveform with audible alarm.",
+        "category": "Monitoring",
+        "image": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=pulse+oximeter+pediatric",
+        "features": [
+            "SpO2 + Heart Rate",
+            "Pediatric Probe",
+            "Audible Alarm",
+            "Waveform Display"
+        ]
+    },
+    {
+        "id": "6",
+        "name": "HME Filter – Heat & Moisture Exchanger",
+        "price": 95000,
+        "description": "Disposable HME filter for tracheostomy patients. Humidifies and warms inhaled air, reducing the risk of tracheal dryness and infection. Pack of 5.",
+        "category": "Respiratory Care",
+        "image": "https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.medicalexpo.com/medical-manufacturer/hme-filter-1029.html",
+        "features": [
+            "Humidification",
+            "Bacterial Filter",
+            "Disposable",
+            "Pack of 5"
+        ]
+    },
+    {
+        "id": "7",
+        "name": "Tracheostomy Care Kit",
+        "price": 275000,
+        "description": "Complete sterile tracheostomy dressing and cleaning kit. Includes gauze, cotton swabs, hydrogen peroxide, saline wipes, and gloves for daily stoma care.",
+        "category": "Wound Care",
+        "image": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=tracheostomy+care+kit",
+        "features": [
+            "Complete Sterile Kit",
+            "Includes Gloves",
+            "Saline Wipes",
+            "Daily Care"
+        ]
+    },
+    {
+        "id": "8",
+        "name": "Nebulizer – Pediatric Compressor",
+        "price": 580000,
+        "description": "Quiet, child-friendly compressor nebulizer with pediatric face mask. Delivers bronchodilators and saline mist for respiratory therapy at home.",
+        "category": "Respiratory Care",
+        "image": "https://images.unsplash.com/photo-1576671081837-01c99d3f80e6?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=nebulizer+anak",
+        "features": [
+            "Quiet Motor",
+            "Pediatric Mask",
+            "Home Therapy",
+            "Easy to Use"
         ]
     }
 ]

@@ -140,32 +140,51 @@ export default function ProductsPage() {
                     {paginatedProducts.map((product, idx) => (
                       <div
                         key={product._id || product.id || idx}
-                        className="flex flex-col rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+                        className="group flex flex-col rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 bg-white cursor-pointer relative"
+                        onClick={() => product.purchaseUrl && window.open(product.purchaseUrl, '_blank')}
                       >
-                        <img
-                          src={product.image || product.imageUrl || '/Girly.png'}
-                          alt={product.name || product.title || 'Product'}
-                          className="h-40 w-full object-contain bg-gray-50 p-2"
-                          onError={(e) => { e.target.src = '/Girly.png'; }}
-                        />
+                        <div className="relative aspect-video overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                          <img
+                            src={product.image || product.imageUrl || '/Girly.png'}
+                            alt={product.name || product.title || 'Product'}
+                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                            onError={(e) => { e.target.src = '/Girly.png'; }}
+                          />
+                          {product.purchaseUrl && (
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                              <span className="bg-white text-gray-900 px-4 py-2 rounded-full font-bold text-xs shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                                VIEW PRODUCT ↗
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex flex-col flex-grow p-4 gap-2">
-                          <h3 className="font-bold text-gray-800 line-clamp-2">
-                            {product.name || product.title || 'Product'}
-                          </h3>
+                          <div className="flex justify-between items-start gap-2">
+                            <h3 className="font-bold text-gray-800 line-clamp-2 group-hover:text-[#f0312f] transition-colors flex-1">
+                              {product.name || product.title || 'Product'}
+                            </h3>
+                            {product.category && (
+                              <span className="text-[9px] bg-red-50 text-[#f0312f] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter shrink-0">
+                                {product.category}
+                              </span>
+                            )}
+                          </div>
+
                           {product.price !== undefined && (
-                            <p className="text-[#f0312f] font-semibold">
+                            <p className="text-[#f0312f] font-black text-lg">
                               Rp {Number(product.price).toLocaleString('id-ID')}
                             </p>
                           )}
+
                           {product.description && (
-                            <p className="text-gray-500 text-sm line-clamp-2">{product.description}</p>
+                            <p className="text-gray-500 text-xs line-clamp-2 font-medium leading-relaxed">{product.description}</p>
                           )}
 
                           {/* Features Preview */}
                           {product.features && product.features.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-1">
                               {product.features.slice(0, 2).map((feature, i) => (
-                                <span key={i} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">
+                                <span key={i} className="text-[10px] bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full font-bold">
                                   {feature}
                                 </span>
                               ))}
@@ -173,20 +192,36 @@ export default function ProductsPage() {
                             </div>
                           )}
 
-                          <div className="mt-auto space-y-2">
+                          <div className="mt-auto pt-4 space-y-2">
                             <button
-                              className="w-full bg-[#f0312f] text-white py-2 rounded-md hover:bg-red-700 transition font-bold text-sm"
-                              onClick={() => handleAddToCart(product)}
+                              className="w-full bg-[#f0312f] text-white py-2.5 rounded-xl hover:bg-red-700 transition font-black text-sm shadow-lg shadow-red-100 active:scale-95"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddToCart(product);
+                              }}
                             >
                               Add to Cart
                             </button>
 
-                            {product.pdfFile && (
+                            {product.purchaseUrl ? (
                               <button
-                                className="w-full bg-white text-[#3455b9] border-2 border-[#3455b9] py-2 rounded-md hover:bg-blue-50 transition font-black text-xs flex items-center justify-center gap-2"
-                                onClick={() => window.open(product.pdfFile, '_blank')}
+                                className="w-full bg-white text-gray-900 border border-gray-200 py-2.5 rounded-xl hover:border-gray-900 transition font-bold text-xs flex items-center justify-center gap-2"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(product.purchaseUrl, '_blank');
+                                }}
                               >
-                                <span>📄</span> DOWNLOAD PDF
+                                SHOP ONLINE ↗
+                              </button>
+                            ) : product.pdfFile && (
+                              <button
+                                className="w-full bg-white text-[#3455b9] border border-blue-100 py-2.5 rounded-xl hover:bg-blue-50 transition font-bold text-xs flex items-center justify-center gap-2"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(product.pdfFile, '_blank');
+                                }}
+                              >
+                                📄 DOWNLOAD PDF
                               </button>
                             )}
                           </div>

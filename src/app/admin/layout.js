@@ -1,12 +1,34 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export default function AdminLayout({ children }) {
     const pathname = usePathname();
+    const router = useRouter();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+    useEffect(() => {
+        // Auth check for all /admin routes except /admin/login
+        if (pathname !== '/admin/login') {
+            const token = sessionStorage.getItem('admin_token');
+            if (!token) {
+                router.push('/admin/login');
+            } else {
+                setIsAuthChecking(false);
+            }
+        } else {
+            setIsAuthChecking(false);
+        }
+    }, [pathname, router]);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('admin_token');
+        sessionStorage.removeItem('admin_email');
+        router.push('/admin/login');
+    };
 
     const navItems = [
         { name: 'Dashboard', href: '/admin', icon: '📊' },
@@ -15,6 +37,19 @@ export default function AdminLayout({ children }) {
         { name: 'Orders', href: '/admin/orders', icon: '📦' },
         { name: 'Go to Website', href: '/', icon: '🌐' },
     ];
+
+    if (isAuthChecking) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <div className="animate-spin h-8 w-8 border-4 border-[#f0312f] border-t-transparent rounded-full"></div>
+            </div>
+        );
+    }
+
+    // Don't wrap login page in the dashboard layout
+    if (pathname === '/admin/login') {
+        return <>{children}</>;
+    }
 
     return (
         <div className="flex min-h-screen bg-[#f8f9fa] font-inter">
@@ -33,8 +68,8 @@ export default function AdminLayout({ children }) {
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isActive
-                                        ? 'bg-red-50 text-[#f0312f] font-bold shadow-sm'
-                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 font-medium'
+                                    ? 'bg-red-50 text-[#f0312f] font-bold shadow-sm'
+                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 font-medium'
                                     }`}
                             >
                                 <span className="text-xl">{item.icon}</span>
@@ -42,6 +77,14 @@ export default function AdminLayout({ children }) {
                             </Link>
                         );
                     })}
+
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-gray-500 hover:bg-red-50 hover:text-[#f0312f] font-medium"
+                    >
+                        <span className="text-xl">🚪</span>
+                        {isSidebarOpen && <span>Logout</span>}
+                    </button>
                 </nav>
             </aside>
 
@@ -65,8 +108,8 @@ export default function AdminLayout({ children }) {
                             <p className="text-sm font-bold text-gray-800">Administrator</p>
                             <p className="text-xs text-gray-400 font-medium">Full Access</p>
                         </div>
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-600 border-2 border-white shadow-sm">
-                            A
+                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-600 border-2 border-white shadow-sm overflow-hidden">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=f0312f&color=fff" alt="Admin" />
                         </div>
                     </div>
                 </header>

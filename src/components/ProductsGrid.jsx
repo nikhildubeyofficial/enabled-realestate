@@ -53,10 +53,16 @@ export default function ProductsGrid() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {products.map((product) => (
-                            <Link
-                                href="/products"
+                            <div
                                 key={product.id}
-                                className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300"
+                                className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                onClick={() => {
+                                    if (product.purchaseUrl) {
+                                        window.open(product.purchaseUrl, '_blank');
+                                    } else {
+                                        window.location.href = '/products';
+                                    }
+                                }}
                             >
                                 <div className="aspect-[4/3] bg-gray-50 p-6 overflow-hidden relative">
                                     <img
@@ -72,16 +78,31 @@ export default function ProductsGrid() {
                                             </span>
                                         </div>
                                     )}
+                                    {product.purchaseUrl && (
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
+                                    )}
                                 </div>
                                 <div className="p-6">
-                                    <h3 className="font-bold text-gray-900 mb-1 group-hover:text-[#f0312f] transition-colors truncate">
-                                        {product.name}
-                                    </h3>
+                                    <div className="flex justify-between items-start gap-2 mb-1">
+                                        <h3 className="font-bold text-gray-900 group-hover:text-[#f0312f] transition-colors truncate">
+                                            {product.name}
+                                        </h3>
+                                        {product.category && (
+                                            <span className="text-[8px] bg-red-50 text-[#f0312f] px-1.5 py-0.5 rounded font-black uppercase shrink-0">
+                                                {product.category}
+                                            </span>
+                                        )}
+                                    </div>
                                     <p className="text-[#f0312f] font-black text-lg">
                                         Rp {Number(product.price).toLocaleString('id-ID')}
                                     </p>
+                                    {product.purchaseUrl && (
+                                        <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">
+                                            Buy Online ↗
+                                        </p>
+                                    )}
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}
