@@ -1,19 +1,41 @@
 import { getOrders, saveOrders } from '@/lib/db';
 
+export async function GET(req) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const email = searchParams.get('email');
+        let orders = await getOrders();
+
+        if (email) {
+            orders = orders.filter(o => o.email === email);
+        }
+
+        return new Response(JSON.stringify(orders), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+}
+
 export async function POST(req) {
     try {
         const orderData = await req.json();
         const orders = await getOrders();
 
         const newOrder = {
-            id: `ORD-${Date.now()}`,
+            _id: `ORD-${Date.now()}`,
             customer: orderData.address.fullName,
             email: orderData.address.email,
-            total: orderData.total || 150000, // Fallback if not provided
+            totalPrice: orderData.total,
             status: 'Processing',
-            date: new Date().toISOString().split('T')[0],
+            createdAt: new Date().toISOString(),
             address: orderData.address,
-            items: orderData.items || []
+            products: orderData.items || []
         };
 
         orders.push(newOrder);
@@ -30,3 +52,4 @@ export async function POST(req) {
         });
     }
 }
+

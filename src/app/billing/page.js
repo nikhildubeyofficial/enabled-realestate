@@ -1,18 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function BillingPage() {
     const router = useRouter();
+    const { user } = useAuth();
     const { cartItems, cartTotal, clearCart } = useCart();
     const [formData, setFormData] = useState({
-        fullName: "",
+        fullName: user?.name || "",
         phone: "",
-        email: "",
+        email: user?.email || "",
         apartment: "",
         street: "",
         city: "",
@@ -20,6 +22,17 @@ export default function BillingPage() {
         postalCode: "",
         saveInfo: true
     });
+
+    // Update form when user data becomes available (e.g. after mount/refresh)
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                fullName: prev.fullName || user.name || "",
+                email: prev.email || user.email || ""
+            }));
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;

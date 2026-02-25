@@ -3,48 +3,40 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { useAuth } from '@/context/AuthContext';
 
 export default function OrdersPage() {
+    const { user } = useAuth();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
 
-    // Mock orders for development
-    const mockOrders = [
-        {
-            _id: 'ord_1',
-            products: [
-                {
-                    productId: '1',
-                    name: 'Pediatric Tracheostomy Care Booklet',
-                    price: 150000,
-                    quantity: 1,
-                    image: '/Book.png'
-                }
-            ],
-            totalPrice: 150000,
-            address: {
-                fullName: "Guest User",
-                email: "guest@example.com",
-                phone: "+6287784629666",
-                street: "Jl. Example No. 123",
-                city: "Jakarta",
-                state: "DKI Jakarta",
-                postalCode: "12345",
-                country: "Indonesia"
-            },
-            createdAt: new Date().toISOString()
-        }
-    ];
-
     useEffect(() => {
-        // Simulate fetching orders
-        const timer = setTimeout(() => {
-            setOrders(mockOrders);
-            setIsLoading(false);
-        }, 800);
-        return () => clearTimeout(timer);
-    }, []);
+        const fetchOrders = async () => {
+            if (!user) {
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/orders?email=${user.email}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    // Sort by most recent first
+                    setOrders(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                } else {
+                    setError("Failed to load orders");
+                }
+            } catch (err) {
+                setError("An error occurred while fetching orders");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOrders();
+    }, [user]);
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('id-ID', {
@@ -78,9 +70,20 @@ export default function OrdersPage() {
                                     </div>
                                 ))}
                             </div>
+                        ) : error ? (
+                            <div className="text-center py-20 bg-white rounded-lg shadow-sm border border-gray-100">
+                                <p className="text-red-500 font-medium">{error}</p>
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="mt-4 text-[#3455b9] font-bold hover:underline"
+                                >
+                                    Retry
+                                </button>
+                            </div>
                         ) : orders.length === 0 ? (
                             <div className="text-center py-20 bg-white rounded-lg shadow-sm border border-gray-100">
                                 <p className="text-gray-500 text-lg">No orders found.</p>
+                                {!user && <p className="text-gray-400 text-sm mt-2">Please log in to view your orders.</p>}
                             </div>
                         ) : (
                             <div className="space-y-6">
