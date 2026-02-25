@@ -1,146 +1,290 @@
 [
     {
-        "id": "1",
-        "name": "Pediatric Tracheostomy Care Booklet",
-        "price": 150000,
-        "description": "Comprehensive bilingual guide (Bahasa & English) for parents caring for children with tracheostomy. Covers equipment, procedures, and emergency contacts.",
-        "category": "Education",
-        "image": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&q=80",
-        "status": "Available",
-        "inStock": true,
-        "pdfFile": "https://drive.google.com/file/d/1LKwZJw3-zQR8ZxP2AkPW2kMaBgAvf2HK/view?usp=sharing",
-        "purchaseUrl": "https://drive.google.com/file/d/1LKwZJw3-zQR8ZxP2AkPW2kMaBgAvf2HK/view",
-        "features": [
-            "Bilingual (Bahasa & English)",
-            "Parent-Contributed",
-            "Comprehensive Care Guide",
-            "Free Download"
-        ]
-    },
-    {
-        "id": "2",
-        "name": "Pediatric Tracheostomy Tube – Shiley Neo",
-        "price": 450000,
-        "description": "Neonatal/pediatric-size Shiley tracheostomy tube with inner cannula. Soft, cuffless design for young patients, widely used in Indonesian paediatric hospitals.",
-        "category": "Tracheostomy Tubes",
-        "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80",
-        "status": "Available",
-        "inStock": true,
-        "pdfFile": "",
-        "purchaseUrl": "https://www.medicalexpo.com/prod/medtronic/product-70019-565786.html",
-        "features": [
-            "Cuffless Design",
-            "Inner Cannula",
-            "Pediatric Size",
-            "Soft Material"
-        ]
-    },
-    {
-        "id": "3",
-        "name": "Sterimar Baby Nasal Spray (100ml)",
-        "price": 185000,
-        "description": "Isotonic saline nasal spray specially formulated for babies and young children. Gently clears nasal congestion and supports daily nasal hygiene.",
+        "id": "t1",
+        "name": "Sterimar Nasal Hygiene (2pcs)",
+        "price": 360000,
+        "description": "Bundle of 2 Sterimar Isotonic Nasal Sprays. 100% natural sea water based formula to help clear and cleanse nasal passages gently. Ideal for daily hygiene for children and adults.",
         "category": "Nasal Care",
         "image": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "",
-        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=sterimar+baby",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=sterimar+nasal+hygiene+2pcs",
         "features": [
-            "Isotonic Formula",
-            "Zero Preservatives",
-            "Baby Safe",
-            "100ml"
+            "100% Natural Sea Water",
+            "Isotonic Solution",
+            "2x 100ml Bottles",
+            "Daily Hygiene"
         ]
     },
     {
-        "id": "4",
-        "name": "Suction Machine – Portable Electric",
-        "price": 1250000,
-        "description": "Compact, rechargeable portable suction machine for airway secretion management. Essential for home care of tracheostomy patients. Includes 10 disposable catheters.",
+        "id": "t2",
+        "name": "Nasal Drops (1pc)",
+        "price": 45000,
+        "description": "Gentle saline nasal drops to alleviate nasal congestion caused by colds or allergies. Easy-to-use dropper bottle for precise application, safe for pediatric use.",
+        "category": "Nasal Care",
+        "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=nasal+drops+saline",
+        "features": [
+            "Pediatric Safe",
+            "Easy Application",
+            "Saline Based",
+            "10ml Bottle"
+        ]
+    },
+    {
+        "id": "t3",
+        "name": "Orezinc Oral Solution (1pc)",
+        "price": 65000,
+        "description": "Zinc supplement solution used as an adjunct to oral rehydration in the management of diarrhea. Supports immune function and promotes faster recovery.",
+        "category": "Supplements",
+        "image": "https://images.unsplash.com/photo-1550572017-ed200f545dec?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=orezinc+sirup",
+        "features": [
+            "Zinc Supplement",
+            "Diarrhea Management",
+            "Oral Rehydration Adjunct",
+            "60ml Syrup"
+        ]
+    },
+    {
+        "id": "t4",
+        "name": "Oxygen Tubing / Selang Oksigen (3pcs)",
+        "price": 75000,
+        "description": "Soft and flexible oxygen nasal cannulas. Non-kinking design ensures continuous oxygen flow. Standard connectors compatible with most home concentrators and tanks.",
+        "category": "Oxygen Therapy",
+        "image": "https://images.unsplash.com/photo-1576091160550-217359f4ecf8?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=selang+oksigen+nasal+cannula",
+        "features": [
+            "Non-Kink Design",
+            "Soft PVC",
+            "Standard Connectors",
+            "Bundle of 3"
+        ]
+    },
+    {
+        "id": "t5",
+        "name": "Blue Line Tracheostomy Tube 3.0 (1pc)",
+        "price": 850000,
+        "description": "Portex Blue Line Tracheostomy Tube, Size 3.0 ID. Cuffed/Uncuffed design tailored for neonatal/pediatric patients. Features a pilot balloon for pressure monitoring.",
+        "category": "Tracheostomy",
+        "image": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.medicalexpo.com/prod/smiths-medical/product-70659-425261.html",
+        "features": [
+            "Size 3.0 ID",
+            "Blue Line Marker",
+            "Biocompatible PVC",
+            "Radiopaque Line"
+        ]
+    },
+    {
+        "id": "t6",
+        "name": "Suction Connecting Tube (2pcs)",
+        "price": 120000,
+        "description": "Sterile suction connecting tubes with hex-connectors. High-quality, non-conductive tubing for use with medical suction canisters and machines.",
         "category": "Suction Equipment",
         "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "",
-        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=portable+suction+machine+tracheostomy",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=suction+connecting+tube",
         "features": [
-            "Rechargeable Battery",
-            "Portable Design",
-            "Adjustable Suction",
-            "Includes Catheters"
+            "Hex Connectors",
+            "Anti-Kink",
+            "2-Meter Length",
+            "Sterile Pack"
         ]
     },
     {
-        "id": "5",
-        "name": "Pulse Oximeter – Pediatric Fingertip",
-        "price": 320000,
-        "description": "Non-invasive fingertip pulse oximeter for continuous SpO2 and heart rate monitoring in infants and children. Displays waveform with audible alarm.",
-        "category": "Monitoring",
+        "id": "t7",
+        "name": "Disposable Manual Resuscitator (1pc)",
+        "price": 325000,
+        "description": "PVC Manual Resuscitator (Ambu Bag) for pediatric use. Disposable design prevents cross-contamination. Includes oxygen reservoir bag and anatomical mask.",
+        "category": "Respiratory",
+        "image": "https://images.unsplash.com/photo-1576671081837-01c99d3f80e6?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=disposable+manual+resuscitator+pediatric",
+        "features": [
+            "PVC Material",
+            "Pediatric Size",
+            "Complete Kit",
+            "Disposable"
+        ]
+    },
+    {
+        "id": "t8",
+        "name": "Portable Suction Filter 7E (6pcs)",
+        "price": 90000,
+        "description": "Hydrophobic bacterial filters for 7E series portable suction machines. Protects the device from contamination and ensures hygienic operation. Pack of 6.",
+        "category": "Suction Equipment",
+        "image": "https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=filter+suction+7E",
+        "features": [
+            "Hydrophobic Filter",
+            "Bacterial Protection",
+            "7E Series Compatible",
+            "Pack of 6"
+        ]
+    },
+    {
+        "id": "t9",
+        "name": "Pediatric/Neonatal Mini Trach (3pcs)",
+        "price": 450000,
+        "description": "Mini-Trach kit components for pediatric airway management. Essential for suctioning and subglottic access in tracheostomy care.",
+        "category": "Tracheostomy",
+        "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.smiths-medical.com/products/tracheostomy/mini-trach-kits",
+        "features": [
+            "Neonatal Size",
+            "Sterile Kit",
+            "Emergency Ready",
+            "Bundle of 3"
+        ]
+    },
+    {
+        "id": "t10",
+        "name": "Extension Tube Type 1 (1pc)",
+        "price": 35000,
+        "description": "High-pressure extension line for IV or respiratory circuits. Luer lock connectors ensure secure attachment. Kink-resistant and transparent for flow monitoring.",
+        "category": "Consumables",
+        "image": "https://images.unsplash.com/photo-1576091160550-217359f4ecf8?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=extension+tube+type+1",
+        "features": [
+            "Luer Lock",
+            "Pressure Resistant",
+            "Latex Free",
+            "150cm Length"
+        ]
+    },
+    {
+        "id": "t11",
+        "name": "Optilube Lubricating Jelly (1pc)",
+        "price": 55000,
+        "description": "Water-soluble sterile lubricating jelly. Ideal for easy insertion of tracheostomy tubes and catheters. Non-greasy and pH balanced.",
+        "category": "Consumables",
+        "image": "https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=optilube+jelly",
+        "features": [
+            "Water Soluble",
+            "Sterile",
+            "pH Balanced",
+            "82g Tube"
+        ]
+    },
+    {
+        "id": "t12",
+        "name": "Neonatal Resuscitation Device (1pc)",
+        "price": 480000,
+        "description": "Specialized T-Piece resuscitator or manual bag for neonatal life support. Precise pressure control for delicate neonate lungs.",
+        "category": "Respiratory",
+        "image": "https://images.unsplash.com/photo-1576671081837-01c99d3f80e6?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=neonatal+resuscitation+unit",
+        "features": [
+            "Neonatal Focus",
+            "Pressure Control",
+            "Reliable Design",
+            "Clinical Grade"
+        ]
+    },
+    {
+        "id": "t13",
+        "name": "Tracheal Tube / ET Tube (1pc)",
+        "price": 125000,
+        "description": "Sterile Endotracheal tube with high-volume, low-pressure cuff. Murphy eye for safety. Graduated markings for easy depth control.",
+        "category": "Respiratory",
+        "image": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=tracheal+tube+ET",
+        "features": [
+            "Sterile Packed",
+            "High-Volume Cuff",
+            "Murphy Eye",
+            "Sizes 2.5-8.0"
+        ]
+    },
+    {
+        "id": "t14",
+        "name": "Elbow Adapter / Circuit Elbow (1pc)",
+        "price": 40000,
+        "description": "Swivel elbow adapter for connection between tracheostomy tube and breathing circuit. Minimized dead space and lightweight design.",
+        "category": "Tracheostomy",
+        "image": "https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=400&q=80",
+        "status": "Available",
+        "inStock": true,
+        "pdfFile": "",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=tracheostomy+elbow+adapter",
+        "features": [
+            "15mm/22mm Sizes",
+            "Swivel Action",
+            "Vented Option",
+            "Lightweight"
+        ]
+    },
+    {
+        "id": "t15",
+        "name": "Trach Strap / Neck Band (1pc)",
+        "price": 25000,
+        "description": "Adjustable tracheostomy tube holder with Velcro closures. Soft, moisture-wicking foam lining protects skin and prevents irritation.",
+        "category": "Tracheostomy",
         "image": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "",
-        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=pulse+oximeter+pediatric",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=tracheostomy+strap",
         "features": [
-            "SpO2 + Heart Rate",
-            "Pediatric Probe",
-            "Audible Alarm",
-            "Waveform Display"
+            "Velcro Closure",
+            "Skin Friendly",
+            "One Size Fits Most",
+            "Moisture Wicking"
         ]
     },
     {
-        "id": "6",
-        "name": "HME Filter – Heat & Moisture Exchanger",
-        "price": 95000,
-        "description": "Disposable HME filter for tracheostomy patients. Humidifies and warms inhaled air, reducing the risk of tracheal dryness and infection. Pack of 5.",
+        "id": "t16",
+        "name": "HME Filter (2pcs)",
+        "price": 180000,
+        "description": "Heat and Moisture Exchangers (HME) for tracheostomy patients. Traps heat and moisture from exhaled breath and returns it upon inhalation.",
         "category": "Respiratory Care",
         "image": "https://images.unsplash.com/photo-1582560475093-ba66accbc424?w=400&q=80",
         "status": "Available",
         "inStock": true,
         "pdfFile": "",
-        "purchaseUrl": "https://www.medicalexpo.com/medical-manufacturer/hme-filter-1029.html",
+        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=hme+filter+tracheostomy",
         "features": [
             "Humidification",
-            "Bacterial Filter",
-            "Disposable",
-            "Pack of 5"
-        ]
-    },
-    {
-        "id": "7",
-        "name": "Tracheostomy Care Kit",
-        "price": 275000,
-        "description": "Complete sterile tracheostomy dressing and cleaning kit. Includes gauze, cotton swabs, hydrogen peroxide, saline wipes, and gloves for daily stoma care.",
-        "category": "Wound Care",
-        "image": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&q=80",
-        "status": "Available",
-        "inStock": true,
-        "pdfFile": "",
-        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=tracheostomy+care+kit",
-        "features": [
-            "Complete Sterile Kit",
-            "Includes Gloves",
-            "Saline Wipes",
-            "Daily Care"
-        ]
-    },
-    {
-        "id": "8",
-        "name": "Nebulizer – Pediatric Compressor",
-        "price": 580000,
-        "description": "Quiet, child-friendly compressor nebulizer with pediatric face mask. Delivers bronchodilators and saline mist for respiratory therapy at home.",
-        "category": "Respiratory Care",
-        "image": "https://images.unsplash.com/photo-1576671081837-01c99d3f80e6?w=400&q=80",
-        "status": "Available",
-        "inStock": true,
-        "pdfFile": "",
-        "purchaseUrl": "https://www.tokopedia.com/search?st=product&q=nebulizer+anak",
-        "features": [
-            "Quiet Motor",
-            "Pediatric Mask",
-            "Home Therapy",
-            "Easy to Use"
+            "Reduced Mucus",
+            "Compact Design",
+            "Bundle of 2"
         ]
     }
 ]
