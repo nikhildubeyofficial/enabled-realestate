@@ -23,32 +23,47 @@ export function AuthProvider({ children }) {
     }, []);
 
     const login = async (email, password) => {
-        // Simulating API call
-        // In reality, this would hit /api/auth/login
-        const mockUser = {
-            id: 'u1',
-            email: email,
-            name: email.split('@')[0],
-            role: email.includes('admin') ? 'admin' : 'user'
-        };
-
-        setUser(mockUser);
-        localStorage.setItem('enabled_user', JSON.stringify(mockUser));
-        return { success: true };
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setUser(data.user);
+                localStorage.setItem('enabled_user', JSON.stringify(data.user));
+                return { success: true };
+            } else {
+                return { success: false, message: data.message };
+            }
+        } catch (error) {
+            return { success: false, message: 'Connection error' };
+        }
     };
 
-    const signup = async (data) => {
-        // Simulating API call
-        const newUser = {
-            id: `u-${Date.now()}`,
-            email: data.email,
-            name: data.name,
-            role: 'user'
-        };
-
-        setUser(newUser);
-        localStorage.setItem('enabled_user', JSON.stringify(newUser));
-        return { success: true };
+    const signup = async (formData) => {
+        try {
+            const res = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setUser(data.user);
+                localStorage.setItem('enabled_user', JSON.stringify(data.user));
+                return { success: true };
+            } else {
+                return { success: false, message: data.message };
+            }
+        } catch (error) {
+            return { success: false, message: 'Connection error' };
+        }
     };
 
     const logout = () => {

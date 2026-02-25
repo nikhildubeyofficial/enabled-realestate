@@ -36,6 +36,8 @@ export default function SignupPage() {
             const result = await signup(formData);
             if (result.success) {
                 router.push('/');
+            } else {
+                setErrorMsg(result.message || 'Signup failed. Please try again.');
             }
         } catch (err) {
             setErrorMsg('An error occurred. Please try again.');

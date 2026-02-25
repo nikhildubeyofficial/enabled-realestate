@@ -1,0 +1,23 @@
+[
+  {
+    "id": "u-admin",
+    "name": "Administrator",
+    "email": "admin@enabled.ngo",
+    "password": "enabled@2024",
+    "role": "admin"
+  },
+  {
+    "id": "u-user",
+    "name": "Test User",
+    "email": "user@example.com",
+    "password": "password123",
+    "role": "user"
+  },
+  {
+    "id": "u-1772028381442",
+    "name": "Test User",
+    "email": "testuser_unique@example.com",
+    "password": "Password123!",
+    "role": "user"
+  }
+]
