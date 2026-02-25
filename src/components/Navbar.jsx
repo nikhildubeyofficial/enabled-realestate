@@ -35,7 +35,7 @@ export default function Navbar() {
 
     return (
         <nav className="w-full bg-[#F0312F] text-white font-inter shadow-md relative z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex justify-between items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-20 py-4 flex justify-between items-center">
                 <Link href="/" className="text-xl font-bold">
                     Enabled.
                 </Link>

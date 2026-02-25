@@ -49,83 +49,133 @@ export default function CartPage() {
               <span>Cart</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 overflow-x-auto">
-                <table className="min-w-full border-separate border-spacing-y-4">
-                  <thead className="bg-[#f4f4f4] text-left">
-                    <tr className="font-inter">
-                      <th className="p-4 font-medium text-gray-700">Product</th>
-                      <th className="p-4 font-medium text-gray-700">Price</th>
-                      <th className="p-4 font-medium text-gray-700">Quantity</th>
-                      <th className="p-4 font-medium text-gray-700">Subtotal</th>
-                      <th className="p-4 font-medium"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item) => (
-                      <tr key={item.id} className="bg-white shadow-sm border border-gray-100 rounded-md">
-                        <td className="p-4">
-                          <div className="flex items-center gap-4 group">
-                            <img
-                              src={item.image || '/Girly.png'}
-                              alt={item.name}
-                              className="w-16 h-16 object-contain rounded border border-gray-100 bg-gray-50 p-1"
-                              onError={(e) => { e.target.src = '/Girly.png'; }}
-                            />
-                            <span className="text-sm sm:text-base font-bold text-gray-800">
-                              {item.name}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-4 text-gray-600">{formatCurrency(item.price)}</td>
-                        <td className="p-4 text-gray-600">
-                          <div className="flex items-center gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="min-w-full border-separate border-spacing-y-4">
+                    <thead className="bg-[#f4f4f4] text-left">
+                      <tr className="font-inter">
+                        <th className="p-4 font-medium text-gray-700">Product</th>
+                        <th className="p-4 font-medium text-gray-700">Price</th>
+                        <th className="p-4 font-medium text-gray-700">Quantity</th>
+                        <th className="p-4 font-medium text-gray-700">Subtotal</th>
+                        <th className="p-4 font-medium"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item) => (
+                        <tr key={item.id} className="bg-white shadow-sm border border-gray-100 rounded-md">
+                          <td className="p-4">
+                            <div className="flex items-center gap-4 group">
+                              <img
+                                src={item.image || '/Girly.png'}
+                                alt={item.name}
+                                className="w-16 h-16 object-contain rounded border border-gray-100 bg-gray-50 p-1"
+                                onError={(e) => { e.target.src = '/Girly.png'; }}
+                              />
+                              <span className="text-sm font-bold text-gray-800">
+                                {item.name}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-4 text-gray-600">{formatCurrency(item.price)}</td>
+                          <td className="p-4 text-gray-600">
+                            <div className="flex items-center gap-3">
+                              <button
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity, -1)}
+                                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors font-bold"
+                              >
+                                -
+                              </button>
+                              <span className="w-4 text-center font-bold">{item.quantity}</span>
+                              <button
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity, 1)}
+                                className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                          <td className="p-4 text-[#f0312f] font-bold">{formatCurrency((item.price || 0) * (item.quantity || 1))}</td>
+                          <td className="p-4 text-right">
+                            <button
+                              onClick={() => handleRemoveItem(item.id)}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                              title="Remove"
+                            >
+                              <span className="text-lg">🗑️</span>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-4">
+                  {cartItems.map((item) => (
+                    <div key={item.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
+                      <div className="w-20 h-20 shrink-0 bg-gray-50 rounded-xl p-2 border border-gray-50 flex items-center justify-center">
+                        <img
+                          src={item.image || '/Girly.png'}
+                          alt={item.name}
+                          className="w-full h-full object-contain"
+                          onError={(e) => { e.target.src = '/Girly.png'; }}
+                        />
+                      </div>
+                      <div className="flex-grow flex flex-col justify-between py-1">
+                        <div className="flex justify-between items-start gap-2">
+                          <h4 className="font-bold text-gray-800 text-sm line-clamp-1">{item.name}</h4>
+                          <button
+                            onClick={() => handleRemoveItem(item.id)}
+                            className="text-gray-400 hover:text-red-500"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div className="flex items-center gap-2">
                             <button
                               onClick={() => handleUpdateQuantity(item.id, item.quantity, -1)}
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors font-bold"
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-lg text-xs font-bold"
                             >
                               -
                             </button>
-                            <span className="w-4 text-center font-bold">{item.quantity}</span>
+                            <span className="w-4 text-center text-xs font-bold">{item.quantity}</span>
                             <button
                               onClick={() => handleUpdateQuantity(item.id, item.quantity, 1)}
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors font-bold"
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded-lg text-xs font-bold"
                             >
                               +
                             </button>
                           </div>
-                        </td>
-                        <td className="p-4 text-[#f0312f] font-bold">{formatCurrency((item.price || 0) * (item.quantity || 1))}</td>
-                        <td className="p-4 text-right">
-                          <button
-                            onClick={() => handleRemoveItem(item.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                            title="Remove"
-                          >
-                            <span className="text-lg">🗑️</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {cartItems.length === 0 && (
-                      <tr>
-                        <td colSpan="5" className="p-20 text-center">
-                          <div className="flex flex-col items-center gap-4">
-                            <span className="text-5xl">🛒</span>
-                            <p className="text-gray-500 font-medium">Your cart is empty.</p>
-                            <Link href="/products" className="bg-[#f0312f] text-white px-8 py-3 rounded-xl font-bold hover:bg-red-700 transition-all">
-                              Start Shopping
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                          <p className="text-[#f0312f] font-black text-sm">
+                            {formatCurrency((item.price || 0) * (item.quantity || 1))}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {cartItems.length === 0 && (
+                  <div className="py-20 text-center bg-white rounded-3xl border border-dashed border-gray-200">
+                    <div className="flex flex-col items-center gap-4">
+                      <span className="text-5xl">🛒</span>
+                      <p className="text-gray-500 font-medium">Your cart is empty.</p>
+                      <Link href="/products" className="bg-[#f0312f] text-white px-8 py-3 rounded-xl font-bold hover:bg-red-700 transition-all">
+                        Start Shopping
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
                 {cartItems.length > 0 && (
                   <button
                     onClick={() => router.push('/products')}
-                    className="mt-6 border-2 border-gray-200 px-8 py-3 rounded-xl hover:bg-gray-50 transition-all font-bold text-gray-700"
+                    className="mt-6 w-full md:w-auto border-2 border-gray-100 px-8 py-3 rounded-xl hover:border-gray-900 transition-all font-bold text-gray-700 text-sm"
                   >
                     ← Continue Shopping
                   </button>

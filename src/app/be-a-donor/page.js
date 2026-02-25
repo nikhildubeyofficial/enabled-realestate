@@ -111,17 +111,23 @@ export default function BeADonorPage() {
                     <div className="flex-1 p-4 sm:p-6 flex flex-col justify-between">
                       <div>
                         <h3 className="text-3xl font-bold text-gray-900 mb-3">{child.name}</h3>
-                        <div className="mb-3">
-                          <p className="text-lg text-gray-700">
-                            <span className="font-bold">Age:</span>{' '}
-                            <span className="font-semibold">{child.age}</span>{' '}
-                            <span className="mx-2">|</span>
-                            <span className="font-bold">Domicile:</span>{' '}
-                            <span className="font-semibold">{child.domicile}</span>{' '}
-                            <span className="mx-2">|</span>
-                            <span className="font-bold">Parents Occupation:</span>{' '}
-                            <span className="font-semibold">{child.parentsOccupation}</span>
-                          </p>
+                        <div className="mb-4">
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm sm:text-lg text-gray-700">
+                            <div>
+                              <span className="font-bold">Age:</span>{' '}
+                              <span className="font-semibold">{child.age}</span>
+                            </div>
+                            <div className="hidden sm:block text-gray-300">|</div>
+                            <div>
+                              <span className="font-bold">Domicile:</span>{' '}
+                              <span className="font-semibold">{child.domicile}</span>
+                            </div>
+                            <div className="hidden sm:block text-gray-300">|</div>
+                            <div>
+                              <span className="font-bold">Parents Occupation:</span>{' '}
+                              <span className="font-semibold">{child.parentsOccupation}</span>
+                            </div>
+                          </div>
                         </div>
                         <p className="text-xl text-gray-600 leading-relaxed">{child.description}</p>
                       </div>

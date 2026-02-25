@@ -25,16 +25,26 @@ export function CartProvider({ children }) {
     }, [cartItems]);
 
     const addToCart = (product) => {
+        // Normalize MongoDB _id → id so deduplication always works
+        const normalizedId = product._id || product.id || String(Math.random());
+        const normalizedProduct = {
+            ...product,
+            id: normalizedId,
+            name: product.name || product.title || 'Product',
+            price: Number(product.price) || 0,
+            image: product.image || product.imageUrl || '/Girly.png',
+        };
         setCartItems((prevItems) => {
-            const existingItem = prevItems.find((item) => item.id === product.id);
+            const existingItem = prevItems.find((item) => item.id === normalizedId);
             if (existingItem) {
                 return prevItems.map((item) =>
-                    item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+                    item.id === normalizedId ? { ...item, quantity: (item.quantity || 1) + 1 } : item
                 );
             }
-            return [...prevItems, { ...product, quantity: 1 }];
+            return [...prevItems, { ...normalizedProduct, quantity: 1 }];
         });
     };
+
 
     const removeFromCart = (productId) => {
         setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));

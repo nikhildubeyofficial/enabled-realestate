@@ -1,7 +1,7 @@
 export default function AboutUs() {
     return (
         <section id="about-us" className="bg-[#fafafa]">
-            <h2 className="text-xl sm:text-2xl font-bold mx-20 mt-15 w-fit sm:place-self-center md:place-self-start pt-10">
+            <h2 className="text-xl sm:text-2xl font-bold mx-4 sm:mx-6 md:mx-10 lg:mx-20 mt-15 w-fit sm:place-self-center md:place-self-start pt-10">
                 About Us
             </h2>
             <div className="flex flex-col-reverse md:flex-row items-center gap-6 lg:gap-10 px-4 sm:px-6 md:px-10 lg:px-20 pb-10">
