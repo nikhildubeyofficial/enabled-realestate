@@ -49,11 +49,7 @@ export default function Footer() {
                                     Pediatric Tracheostomy Care Booklet
                                 </Link>
                             </li>
-                            <li>
-                                <Link href="/private-consultation-booking-services" className="underline hover:text-gray-200 transition-colors">
-                                    Private Consultation Booking Services
-                                </Link>
-                            </li>
+
                             <li>
                                 <Link href="/pro-bono-consulting-project" className="underline hover:text-gray-200 transition-colors">
                                     Pro Bono Consulting Project
