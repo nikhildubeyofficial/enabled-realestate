@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
     const { user, logout } = useAuth();
+    const { cartCount } = useCart();
 
     const handleNavbarToggle = () => {
         setIsOpen(!isOpen);
@@ -48,8 +50,8 @@ export default function Navbar() {
                     <Link href="/be-a-donor" className="hover:underline">
                         Be a Donor
                     </Link>
-                    <Link href="/cart" className="hover:underline">
-                        Cart
+                    <Link href="/cart" className="hover:underline flex items-center gap-1">
+                        Cart {cartCount > 0 && <span className="bg-white text-[#F0312F] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{cartCount}</span>}
                     </Link>
                     {user ? (
                         <div className="flex items-center gap-4">
@@ -99,8 +101,9 @@ export default function Navbar() {
                     <Link href="/be-a-donor" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700">
                         Be a Donor
                     </Link>
-                    <Link href="/cart" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700">
-                        Cart
+                    <Link href="/cart" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700 flex items-center justify-between">
+                        <span>Cart</span>
+                        {cartCount > 0 && <span className="bg-white text-[#F0312F] text-[10px] font-bold px-2 py-0.5 rounded-full">{cartCount}</span>}
                     </Link>
                     <button className="block w-full mt-2 bg-white text-[#F0312F] px-4 py-2 rounded hover:bg-gray-100 transition-all duration-300 text-center font-bold hover:-translate-y-1 hover:shadow-lg" onClick={handleSignupLogin}>
                         Signup / Login

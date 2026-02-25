@@ -57,11 +57,7 @@ export default function ProductsGrid() {
                                 key={product.id}
                                 className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer"
                                 onClick={() => {
-                                    if (product.purchaseUrl) {
-                                        window.open(product.purchaseUrl, '_blank');
-                                    } else {
-                                        window.location.href = '/products';
-                                    }
+                                    window.location.href = '/products';
                                 }}
                             >
                                 <div className="aspect-[4/3] bg-gray-50 p-6 overflow-hidden relative">
@@ -78,9 +74,6 @@ export default function ProductsGrid() {
                                             </span>
                                         </div>
                                     )}
-                                    {product.purchaseUrl && (
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
-                                    )}
                                 </div>
                                 <div className="p-6">
                                     <div className="flex justify-between items-start gap-2 mb-1">
@@ -96,11 +89,9 @@ export default function ProductsGrid() {
                                     <p className="text-[#f0312f] font-black text-lg">
                                         Rp {Number(product.price).toLocaleString('id-ID')}
                                     </p>
-                                    {product.purchaseUrl && (
-                                        <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">
-                                            Buy Online ↗
-                                        </p>
-                                    )}
+                                    <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">
+                                        Details →
+                                    </p>
                                 </div>
                             </div>
                         ))}

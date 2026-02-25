@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { useCart } from '@/context/CartContext';
 
 export default function BillingPage() {
     const router = useRouter();
+    const { cartItems, cartTotal, clearCart } = useCart();
     const [formData, setFormData] = useState({
         fullName: "",
         phone: "",
@@ -45,11 +47,16 @@ export default function BillingPage() {
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ address })
+                body: JSON.stringify({
+                    address,
+                    items: cartItems,
+                    total: cartTotal
+                })
             });
 
             if (res.ok) {
                 alert("✅ Order placed successfully!");
+                clearCart();
                 router.push('/orders');
             } else {
                 alert("❌ Failed to place order. Please try again.");
@@ -187,11 +194,21 @@ export default function BillingPage() {
                             <div className="lg:w-1/2 flex flex-col justify-center">
                                 <div className="bg-white p-6 sm:p-10 rounded-lg shadow-sm border border-gray-100">
                                     <h3 className="text-xl font-bold mb-6 text-gray-800">Your Order</h3>
-                                    {/* Typical Order summary list would go here */}
+                                    <div className="space-y-4 max-h-60 overflow-y-auto mb-6 pr-2">
+                                        {cartItems.map((item) => (
+                                            <div key={item.id} className="flex justify-between items-center text-sm py-2 border-b border-gray-50">
+                                                <div className="flex items-center gap-3">
+                                                    <span className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded text-[10px] font-bold">{item.quantity}x</span>
+                                                    <span className="text-gray-700 truncate max-w-[150px]">{item.name}</span>
+                                                </div>
+                                                <span className="font-bold text-gray-900">Rp {((item.price || 0) * (item.quantity || 1)).toLocaleString('id-ID')}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                     <div className="space-y-4">
                                         <div className="flex justify-between pb-2 border-b border-gray-100">
                                             <span className="text-gray-600">Product Total</span>
-                                            <span className="font-medium">Calculated in Cart</span>
+                                            <span className="font-bold text-[#f0312f]">Rp {cartTotal.toLocaleString('id-ID')}</span>
                                         </div>
                                         <div className="flex justify-between pb-2 border-b border-gray-100">
                                             <span className="text-gray-600">Shipping</span>

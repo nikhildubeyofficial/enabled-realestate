@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 import "./original.css";
 
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="antialiased">
         <AuthProvider>
-          {children}
+          <CartProvider>
+            {children}
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

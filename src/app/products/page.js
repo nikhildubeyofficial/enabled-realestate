@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { useCart } from '@/context/CartContext';
 
 const ITEMS_PER_PAGE = 8;
 
 export default function ProductsPage() {
+  const { addToCart } = useCart();
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -70,6 +72,7 @@ export default function ProductsPage() {
   }, []);
 
   const handleAddToCart = (product) => {
+    addToCart(product);
     const name = product.name || product.title || 'item';
     alert(`"${name}" has been added to your cart!`);
   };
@@ -140,8 +143,7 @@ export default function ProductsPage() {
                     {paginatedProducts.map((product, idx) => (
                       <div
                         key={product._id || product.id || idx}
-                        className="group flex flex-col rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 bg-white cursor-pointer relative"
-                        onClick={() => product.purchaseUrl && window.open(product.purchaseUrl, '_blank')}
+                        className="group flex flex-col rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 bg-white relative"
                       >
                         <div className="relative aspect-video overflow-hidden bg-gray-50 flex items-center justify-center p-4">
                           <img
@@ -151,10 +153,7 @@ export default function ProductsPage() {
                             onError={(e) => { e.target.src = '/Girly.png'; }}
                           />
                           {product.purchaseUrl && (
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                              <span className="bg-white text-gray-900 px-4 py-2 rounded-full font-bold text-xs shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                                VIEW PRODUCT ↗
-                              </span>
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
                             </div>
                           )}
                         </div>
@@ -194,32 +193,16 @@ export default function ProductsPage() {
 
                           <div className="mt-auto pt-4 space-y-2">
                             <button
-                              className="w-full bg-[#f0312f] text-white py-2.5 rounded-xl hover:bg-red-700 transition font-black text-sm shadow-lg shadow-red-100 active:scale-95"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleAddToCart(product);
-                              }}
+                              className="w-full bg-[#f0312f] text-white py-3 rounded-xl hover:bg-red-700 transition font-black text-sm shadow-lg shadow-red-100 active:scale-95"
+                              onClick={() => handleAddToCart(product)}
                             >
                               Add to Cart
                             </button>
 
-                            {product.purchaseUrl ? (
-                              <button
-                                className="w-full bg-white text-gray-900 border border-gray-200 py-2.5 rounded-xl hover:border-gray-900 transition font-bold text-xs flex items-center justify-center gap-2"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  window.open(product.purchaseUrl, '_blank');
-                                }}
-                              >
-                                SHOP ONLINE ↗
-                              </button>
-                            ) : product.pdfFile && (
+                            {product.pdfFile && (
                               <button
                                 className="w-full bg-white text-[#3455b9] border border-blue-100 py-2.5 rounded-xl hover:bg-blue-50 transition font-bold text-xs flex items-center justify-center gap-2"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  window.open(product.pdfFile, '_blank');
-                                }}
+                                onClick={() => window.open(product.pdfFile, '_blank')}
                               >
                                 📄 DOWNLOAD PDF
                               </button>
