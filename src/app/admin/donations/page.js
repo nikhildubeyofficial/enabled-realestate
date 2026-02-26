@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Heart, X } from 'lucide-react';
 
 export default function AdminDonationsPage() {
     const [donations, setDonations] = useState([]);
@@ -70,7 +71,9 @@ export default function AdminDonationsPage() {
                             {donation.image ? (
                                 <img src={donation.image} alt="" className="w-full h-full object-cover" />
                             ) : (
-                                <span className="text-4xl text-gray-300">💝</span>
+                                <span className="flex items-center justify-center w-full h-full">
+                                    <Heart className="w-12 h-12 text-gray-300 shrink-0" aria-hidden />
+                                </span>
                             )}
                         </div>
                         <div className="p-6 flex flex-col flex-grow">
@@ -99,7 +102,7 @@ export default function AdminDonationsPage() {
                     <div className="bg-white rounded-3xl w-full max-w-lg p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-2xl font-black text-gray-800">Log Distribution</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg" aria-label="Close"><X className="w-6 h-6" /></button>
                         </div>
                         <form onSubmit={handleAddDonation} className="space-y-4">
                             <div>

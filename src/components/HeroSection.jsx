@@ -11,7 +11,7 @@ export default function HeroSection() {
 
     return (
         <div
-            className={`flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 sm:px-6 md:px-10 lg:px-20 lg:min-h-[calc(100vh-235px)] pt-10 transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`flex flex-col-reverse lg:flex-row items-center justify-between bg-white px-4 sm:px-6 md:px-10 lg:px-20 lg:min-h-[calc(100vh-235px)] pt-10 transition-all duration-1000 ease-out overflow-x-hidden ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         >
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-start mb-8 lg:mb-0">
                 <div className="w-full sm:w-[300px] md:w-[360px] lg:w-[600px] pb-10 lg:pb-0 xl:-mb-4">

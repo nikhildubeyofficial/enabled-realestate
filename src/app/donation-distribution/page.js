@@ -87,7 +87,10 @@ const IMAGES = {
   eF: ["2025-11-18_02-31-18_UTC_2.webp"]
 };
 
-// Mapping keys to their respective image folders/arrays
+// Instagram embed URL – posts load directly from Instagram, no file hosting or downloads
+const instaEmbedUrl = (postId) => `https://www.instagram.com/p/${postId}/embed/`;
+
+// Mapping keys to their respective image count (for badge)
 const ai = {
   C5dUfGfy1uS: IMAGES.OB,
   "C78-H1dSMwZ": ["2024-06-08_11-14-59_UTC_10.webp", "2024-06-08_11-14-59_UTC_2.webp", "2024-06-08_11-14-59_UTC_3.webp", "2024-06-08_11-14-59_UTC_4.webp", "2024-06-08_11-14-59_UTC_5.webp", "2024-06-08_11-14-59_UTC_6.webp", "2024-06-08_11-14-59_UTC_7.webp", "2024-06-08_11-14-59_UTC_8.webp", "2024-06-08_11-14-59_UTC_9.webp"],
@@ -181,7 +184,6 @@ const ai = {
 export default function DonationDistributionPage() {
   const [pageOffset, setPageOffset] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
   const itemsPerPage = 8;
   const allPostIds = Object.keys(ai).sort();
@@ -196,35 +198,12 @@ export default function DonationDistributionPage() {
     setPageOffset(prev => Math.min(allPostIds.length - itemsPerPage, prev + itemsPerPage));
   };
 
-  const openModal = (postId) => {
-    setSelectedPost(postId);
-    setCurrentImageIdx(0);
-  };
-
-  const closeModal = () => {
-    setSelectedPost(null);
-    setCurrentImageIdx(0);
-  };
-
-  const nextImage = () => {
-    if (selectedPost) {
-      setCurrentImageIdx(prev => prev < ai[selectedPost].length - 1 ? prev + 1 : 0);
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedPost) {
-      setCurrentImageIdx(prev => prev > 0 ? prev - 1 : ai[selectedPost].length - 1);
-    }
-  };
+  const openModal = (postId) => setSelectedPost(postId);
+  const closeModal = () => setSelectedPost(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (selectedPost) {
-        if (e.key === "Escape") closeModal();
-        else if (e.key === "ArrowLeft") prevImage();
-        else if (e.key === "ArrowRight") nextImage();
-      }
+      if (selectedPost && e.key === "Escape") closeModal();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -299,47 +278,33 @@ export default function DonationDistributionPage() {
             <div className="relative">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6">
                 {displayedPostIds.map((postId, index) => {
-                  const postImages = ai[postId];
-                  const firstImage = postImages[0];
-                  const count = postImages.length;
-
+                  const count = ai[postId]?.length ?? 1;
                   return (
                     <motion.div
                       key={postId}
-                      className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-300 cursor-pointer"
+                      className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group hover:shadow-xl transition-all duration-300 cursor-pointer ring-2 ring-transparent hover:ring-purple-400"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={{ scale: 1.02 }}
                       onClick={() => openModal(postId)}
                     >
-                      <img
-                        src={`/DonationDistributionInsta/${postId}/${firstImage}`}
-                        alt={`Donation distribution impact from post ${postId}`}
-                        className="w-full h-full object-cover"
+                      <iframe
+                        src={instaEmbedUrl(postId)}
+                        title={`Instagram post ${postId}`}
+                        className="absolute inset-0 w-full h-full pointer-events-none"
                         loading="lazy"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x400?text=Instagram+Post';
-                        }}
+                        style={{ border: 0 }}
                       />
+                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3">
+                        <span className="text-white text-sm font-semibold">View post</span>
+                      </div>
                       {count > 1 && (
-                        <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 pointer-events-none">
                           <Users className="w-3 h-3" />
                           {count}
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                        <span className="text-white text-sm font-semibold">View Gallery</span>
-                      </div>
-                      <a
-                        href={`https://www.instagram.com/p/${postId}/`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute top-2 left-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Instagram className="w-4 h-4" />
-                      </a>
                     </motion.div>
                   );
                 })}
@@ -398,47 +363,16 @@ export default function DonationDistributionPage() {
                   </button>
 
                   <div className="relative bg-white rounded-lg overflow-hidden">
-                    <div className="relative aspect-square md:aspect-video flex items-center justify-center bg-gray-100">
-                      <AnimatePresence mode="wait">
-                        <motion.img
-                          key={`${selectedPost}-${currentImageIdx}`}
-                          src={`/DonationDistributionInsta/${selectedPost}/${ai[selectedPost][currentImageIdx]}`}
-                          alt={`Gallery image ${currentImageIdx + 1}`}
-                          className="max-h-full max-w-full object-contain"
-                          initial={{ opacity: 0, x: 100 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -100 }}
-                          transition={{ duration: 0.3 }}
-                          onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/800x600?text=Gallery+Image+Not+Found';
-                          }}
-                        />
-                      </AnimatePresence>
-
-                      {ai[selectedPost].length > 1 && (
-                        <>
-                          <button
-                            onClick={prevImage}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200"
-                          >
-                            <ChevronLeft size={24} className="text-gray-800" />
-                          </button>
-                          <button
-                            onClick={nextImage}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-200"
-                          >
-                            <ChevronRight size={24} className="text-gray-800" />
-                          </button>
-                        </>
-                      )}
-
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                        {currentImageIdx + 1} / {ai[selectedPost].length}
-                      </div>
+                    <div className="relative w-full bg-gray-100" style={{ minHeight: '480px' }}>
+                      <iframe
+                        src={instaEmbedUrl(selectedPost)}
+                        title={`Instagram post ${selectedPost}`}
+                        className="w-full border-0"
+                        style={{ height: '580px' }}
+                      />
                     </div>
-
-                    <div className="p-4 bg-white border-t flex items-center justify-between">
-                      <p className="text-gray-600 text-sm">Instagram Post: {selectedPost}</p>
+                    <div className="p-4 bg-white border-t flex items-center justify-between flex-wrap gap-3">
+                      <p className="text-gray-600 text-sm">Instagram post</p>
                       <a
                         href={`https://www.instagram.com/p/${selectedPost}/`}
                         target="_blank"
@@ -449,29 +383,6 @@ export default function DonationDistributionPage() {
                         View on Instagram
                       </a>
                     </div>
-
-                    {ai[selectedPost].length > 1 && (
-                      <div className="px-4 pb-4 bg-white">
-                        <div className="flex gap-2 overflow-x-auto py-2">
-                          {ai[selectedPost].map((img, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => setCurrentImageIdx(idx)}
-                              className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${idx === currentImageIdx ? "border-purple-600 scale-105" : "border-gray-300 hover:border-gray-400"}`}
-                            >
-                              <img
-                                src={`/DonationDistributionInsta/${selectedPost}/${img}`}
-                                alt={`Thumbnail ${idx + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.target.src = 'https://via.placeholder.com/64x64?text=X';
-                                }}
-                              />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </motion.div>

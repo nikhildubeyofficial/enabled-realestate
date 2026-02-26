@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
+import { X } from 'lucide-react';
 
 export default function OrdersPage() {
     const { user } = useAuth();
@@ -87,8 +88,8 @@ export default function OrdersPage() {
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {orders.map(order => (
-                                    <div key={order._id} className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center border border-gray-100 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+                                {orders.map((order, index) => (
+                                    <div key={order.id || order._id || `order-${index}`} className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center border border-gray-100 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
                                         <div className="flex items-start gap-4">
                                             <img
                                                 src={order.products[0]?.image || "/placeholder.jpg"}
@@ -128,15 +129,16 @@ export default function OrdersPage() {
                             <div className="bg-white rounded-2xl w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl">
                                 <button
                                     onClick={() => setSelectedOrder(null)}
-                                    className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-black p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+                                    aria-label="Close"
                                 >
-                                    ×
+                                    <X className="w-5 h-5" />
                                 </button>
                                 <h3 className="text-2xl font-bold mb-6 text-gray-800">Order Details</h3>
 
                                 <div className="space-y-4 mb-8">
                                     {(selectedOrder.products || selectedOrder.items || []).map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-4 border border-gray-100 rounded-xl p-4 shadow-sm bg-gray-50">
+                                        <div key={item.id ?? item._id ?? `item-${idx}`} className="flex items-center gap-4 border border-gray-100 rounded-xl p-4 shadow-sm bg-gray-50">
                                             <img
                                                 src={item.image || "/placeholder.jpg"}
                                                 alt={item.name}

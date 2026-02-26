@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Lock } from 'lucide-react';
 
 // Hardcoded admin credentials
 const ADMIN_CREDENTIALS = {
@@ -105,8 +106,9 @@ export default function AdminLoginPage() {
                     </form>
 
                     <div className="mt-6 pt-6 border-t border-white/10">
-                        <p className="text-xs text-slate-500 text-center font-medium">
-                            🔒 This panel is restricted to authorized administrators only.
+                        <p className="text-xs text-slate-500 text-center font-medium flex items-center justify-center gap-1.5">
+                            <Lock className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                            This panel is restricted to authorized administrators only.
                         </p>
                     </div>
                 </div>

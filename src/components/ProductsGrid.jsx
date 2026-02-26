@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 
 export default function ProductsGrid() {
     const [products, setProducts] = useState([]);
@@ -89,8 +90,9 @@ export default function ProductsGrid() {
                                     <p className="text-[#f0312f] font-black text-lg">
                                         Rp {Number(product.price).toLocaleString('id-ID')}
                                     </p>
-                                    <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">
-                                        Details →
+                                    <p className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest flex items-center gap-0.5">
+                                        Details
+                                        <ChevronRight className="w-3 h-3 shrink-0" aria-hidden />
                                     </p>
                                 </div>
                             </div>

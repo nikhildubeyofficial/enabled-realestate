@@ -1,20 +1,23 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
+import { FileDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ITEMS_PER_PAGE = 8;
 
 export default function ProductsPage() {
-  const { addToCart } = useCart();
+  const { addToCart, cartCount } = useCart();
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
+  const [addedToast, setAddedToast] = useState(null);
+  const toastTimeoutRef = useRef(null);
 
   // Fetch products via our proxy API to avoid CORS
   useEffect(() => {
@@ -73,29 +76,62 @@ export default function ProductsPage() {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    const name = product.name || product.title || 'item';
-    alert(`"${name}" has been added to your cart!`);
+    const name = product.name || product.title || 'Item';
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setAddedToast(name);
+    toastTimeoutRef.current = setTimeout(() => {
+      setAddedToast(null);
+      toastTimeoutRef.current = null;
+    }, 3000);
   };
 
   return (
     <div className="font-sans">
       <div className="flex flex-col min-h-screen font-inter">
         <Navbar />
-        <main className="flex-grow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-16">
+        {/* Floating cart FAB – mobile only, always visible */}
+        <a
+          href="/cart"
+          className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-[#f0312f] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-red-600 active:scale-95 transition-all"
+          aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden>
+            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          {cartCount > 0 && (
+            <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-white text-[#f0312f] text-xs font-bold rounded-full border-2 border-[#f0312f]">
+              {cartCount > 99 ? '99+' : cartCount}
+            </span>
+          )}
+        </a>
+        {/* Added to cart toast */}
+        {addedToast && (
+          <div
+            role="alert"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-[#f0312f] text-white font-bold rounded-xl shadow-lg flex items-center gap-2"
+          >
+            <span className="w-2 h-2 bg-white rounded-full shrink-0" />
+            &quot;{addedToast}&quot; added to cart
+          </div>
+        )}
+        <main className="flex-grow overflow-x-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 pb-16">
             {/* Search and Sort Controls */}
             <div className="mb-6 flex flex-col sm:flex-row gap-4">
               <input
                 placeholder="Search by name, category, or description..."
-                className="flex-1 p-3 border-2 border-red-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f0312f] focus:border-[#f0312f] transition-all"
+                className="flex-1 min-h-[44px] p-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] focus:border-[#f0312f] transition-all"
                 type="text"
                 value={searchTerm}
                 onChange={handleSearch}
+                aria-label="Search products"
               />
               <select
-                className="p-3 border-2 border-red-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#f0312f] bg-white hover:border-[#f0312f] transition-all cursor-pointer"
+                className="min-h-[44px] px-4 py-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] bg-white hover:border-[#f0312f] transition-all cursor-pointer"
                 value={sortOrder}
                 onChange={handleSort}
+                aria-label="Sort products"
               >
                 <option value="default">Default</option>
                 <option value="asc">A-Z (Alphabetical)</option>
@@ -201,10 +237,11 @@ export default function ProductsPage() {
 
                             {product.pdfFile && (
                               <button
-                                className="w-full bg-white text-[#3455b9] border border-blue-100 py-2.5 rounded-xl hover:bg-blue-50 transition font-bold text-xs flex items-center justify-center gap-2"
+                                className="w-full bg-white text-[#3455b9] border border-blue-100 py-2.5 rounded-xl hover:bg-blue-50 transition font-bold text-xs flex items-center justify-center gap-2 min-h-[44px]"
                                 onClick={() => window.open(product.pdfFile, '_blank')}
                               >
-                                📄 DOWNLOAD PDF
+                                <FileDown className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                                DOWNLOAD PDF
                               </button>
                             )}
                           </div>
@@ -218,21 +255,23 @@ export default function ProductsPage() {
                 {totalPages > 1 && (
                   <div className="flex justify-center items-center gap-4 mt-10">
                     <button
-                      className="px-5 py-2 rounded border border-gray-300 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                      className="px-4 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed font-medium min-h-[44px] flex items-center gap-1"
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={safePage <= 1}
                     >
-                      ← Previous
+                      <ChevronLeft className="w-4 h-4 shrink-0" aria-hidden />
+                      Previous
                     </button>
-                    <span className="text-gray-600 text-sm">
+                    <span className="text-gray-600 text-sm px-2">
                       Page {safePage} of {totalPages}
                     </span>
                     <button
-                      className="px-5 py-2 rounded border border-gray-300 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                      className="px-4 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed font-medium min-h-[44px] flex items-center gap-1"
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={safePage >= totalPages}
                     >
-                      Next →
+                      Next
+                      <ChevronRight className="w-4 h-4 shrink-0" aria-hidden />
                     </button>
                   </div>
                 )}

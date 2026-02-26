@@ -26,5 +26,12 @@
     "email": "user_integrity_test@example.com",
     "password": "password123",
     "role": "user"
+  },
+  {
+    "id": "u-1772089024819",
+    "name": "Manas Gedam",
+    "email": "manasgedam635@gmail.com",
+    "password": "Manas@1234",
+    "role": "user"
   }
 ]

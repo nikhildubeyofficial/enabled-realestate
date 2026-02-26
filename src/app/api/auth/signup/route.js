@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { getUsers, saveUsers } from '@/lib/db';
 
+// Invalidate shared auth cache so new signups can log in immediately
+function invalidateAuthUsersCache() {
+    globalThis.__authUsersCache = null;
+    globalThis.__authUsersCacheTime = 0;
+}
+
 export async function POST(request) {
     try {
         const { name, email, password } = await request.json();
 
-        // Read existing users
         const users = await getUsers();
 
         // Check if user already exists
@@ -24,6 +29,7 @@ export async function POST(request) {
 
         users.push(newUser);
         await saveUsers(users);
+        invalidateAuthUsersCache();
 
         // Return user without password
         const { password: _, ...userWithoutPassword } = newUser;
