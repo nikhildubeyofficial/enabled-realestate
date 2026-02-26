@@ -20,8 +20,9 @@ export async function POST(request) {
         const { email, password } = await request.json();
 
         const users = await getUsersForAuth();
+        const emailLower = (email || '').trim().toLowerCase();
 
-        const user = users.find(u => u.email === email && u.password === password);
+        const user = users.find(u => (u.email || '').trim().toLowerCase() === emailLower && u.password === password);
 
         if (!user) {
             return NextResponse.json({ success: false, message: 'Invalid email or password' }, { status: 401 });

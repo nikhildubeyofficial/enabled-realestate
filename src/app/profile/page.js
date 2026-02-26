@@ -16,6 +16,10 @@ export default function ProfilePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [ordersLoading, setOrdersLoading] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deletePassword, setDeletePassword] = useState('');
+    const [deleteError, setDeleteError] = useState('');
+    const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
     useEffect(() => {
         if (!loading) {
@@ -36,6 +40,30 @@ export default function ProfilePage() {
     const handleLogout = () => {
         logout();
         router.push('/login');
+    };
+
+    const handleDeleteAccount = async (e) => {
+        e.preventDefault();
+        setDeleteError('');
+        setDeleteSubmitting(true);
+        try {
+            const res = await fetch('/api/auth/delete-account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: user.email, password: deletePassword })
+            });
+            const data = await res.json();
+            if (data.success) {
+                logout();
+                router.push('/');
+            } else {
+                setDeleteError(data.message || 'Failed to delete account');
+            }
+        } catch {
+            setDeleteError('Something went wrong. Please try again.');
+        } finally {
+            setDeleteSubmitting(false);
+        }
     };
 
     const recentOrders = orders.slice(0, 5);
@@ -123,6 +151,48 @@ export default function ProfilePage() {
                                     >
                                         Logout
                                     </button>
+
+                                    {!showDeleteConfirm ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowDeleteConfirm(true)}
+                                            className="w-full text-red-600 border border-red-200 p-3 rounded-lg hover:bg-red-50 transition-all font-medium text-sm"
+                                        >
+                                            Delete my account
+                                        </button>
+                                    ) : (
+                                        <div className="border border-red-200 rounded-lg p-4 bg-red-50/50 space-y-3">
+                                            <p className="text-sm text-gray-700 font-medium">Confirm account deletion. Enter your password:</p>
+                                            <form onSubmit={handleDeleteAccount} className="space-y-2">
+                                                <input
+                                                    type="password"
+                                                    value={deletePassword}
+                                                    onChange={(e) => setDeletePassword(e.target.value)}
+                                                    placeholder="Your password"
+                                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                                                    required
+                                                    autoComplete="current-password"
+                                                />
+                                                {deleteError && <p className="text-sm text-red-600">{deleteError}</p>}
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => { setShowDeleteConfirm(false); setDeletePassword(''); setDeleteError(''); }}
+                                                        className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-100"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        type="submit"
+                                                        disabled={deleteSubmitting}
+                                                        className="flex-1 bg-red-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+                                                    >
+                                                        {deleteSubmitting ? 'Deleting…' : 'Delete account'}
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (

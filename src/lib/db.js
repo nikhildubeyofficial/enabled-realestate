@@ -213,3 +213,60 @@ export const saveOrders = (data) => writeData('orders.json', data);
 
 export const getUsers = () => readData('users.json');
 export const saveUsers = (data) => writeData('users.json', data);
+
+/** Insert a single user (direct to Supabase when available). */
+export async function insertUser(user) {
+    invalidateCached('users.json');
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        try {
+            const { error } = await supabase.from('users').insert(user);
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Supabase insert user error:', err);
+            return false;
+        }
+    }
+    const filePath = getFilePath('users.json');
+    let list = [];
+    if (fs.existsSync(filePath)) {
+        try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            list = JSON.parse(content || '[]');
+        } catch (_) {}
+    }
+    list.push(user);
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(list, null, 2), 'utf8');
+        return true;
+    } catch (err) {
+        console.error('Error writing users.json:', err);
+        return false;
+    }
+}
+
+/** Delete a user by id (direct from Supabase when available). */
+export async function deleteUserById(userId) {
+    invalidateCached('users.json');
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        try {
+            const { error } = await supabase.from('users').delete().eq('id', userId);
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Supabase delete user error:', err);
+            return false;
+        }
+    }
+    const filePath = getFilePath('users.json');
+    if (!fs.existsSync(filePath)) return false;
+    try {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const list = JSON.parse(content || '[]').filter((u) => u.id !== userId);
+        fs.writeFileSync(filePath, JSON.stringify(list, null, 2), 'utf8');
+        return true;
+    } catch (err) {
+        console.error('Error updating users.json:', err);
+        return false;
+    }
+}
