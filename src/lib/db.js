@@ -14,18 +14,82 @@ const TABLE_MAP = {
     'donations.json': 'donations'
 };
 
+// Mapping helpers for Supabase (CamelCase to lowercase)
+const FIELD_MAPPINGS = {
+    'products': {
+        from: (item) => ({
+            ...item,
+            purchaseUrl: item.purchaseurl,
+            pdfFile: item.pdffile,
+            inStock: item.instock
+        }),
+        to: (item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            description: item.description,
+            image: item.image,
+            category: item.category,
+            purchaseurl: item.purchaseUrl,
+            pdffile: item.pdfFile,
+            features: item.features,
+            quantity: item.quantity,
+            status: item.status,
+            instock: item.inStock
+        })
+    },
+    'orders': {
+        from: (item) => ({
+            ...item,
+            totalPrice: item.totalprice,
+            createdAt: item.createdat
+        }),
+        to: (item) => ({
+            id: item.id,
+            customer: item.customer,
+            email: item.email,
+            total: item.total,
+            totalprice: item.totalPrice,
+            status: item.status,
+            address: item.address,
+            products: item.products,
+            items: item.items,
+            date: item.date,
+            createdat: item.createdAt || new Date().toISOString()
+        })
+    },
+    'donations': {
+        from: (item) => item,
+        to: (item) => ({
+            id: item.id,
+            donor_name: item.donor_name || item.title,
+            title: item.title || item.donor_name,
+            recipient: item.recipient,
+            amount: item.amount,
+            program: item.program,
+            status: item.status,
+            date: item.date,
+            image: item.image,
+            description: item.description
+        })
+    }
+};
+
 export async function readData(filename) {
-    // If Supabase is configured, use it
     if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         const table = TABLE_MAP[filename];
         if (table) {
             try {
                 const { data, error } = await supabase.from(table).select('*');
                 if (error) throw error;
+
+                // Map from Supabase lowercase to CamelCase
+                if (FIELD_MAPPINGS[table]) {
+                    return data.map(FIELD_MAPPINGS[table].from);
+                }
                 return data || [];
             } catch (err) {
                 console.error(`Supabase read error for ${table}:`, err);
-                // Fallback to JSON if Supabase fails (optional)
             }
         }
     }
@@ -44,14 +108,18 @@ export async function readData(filename) {
 }
 
 export async function writeData(filename, data) {
-    // If Supabase is configured, use it
     if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         const table = TABLE_MAP[filename];
         if (table) {
             try {
-                // For simplicity, we assume 'upsert' works if data has unique IDs
-                // In a real app, you'd handle specific logic for users vs orders
-                const { error } = await supabase.from(table).upsert(data);
+                let mappedData = Array.isArray(data) ? data : [data];
+
+                // Map to Supabase lowercase
+                if (FIELD_MAPPINGS[table]) {
+                    mappedData = mappedData.map(FIELD_MAPPINGS[table].to);
+                }
+
+                const { error } = await supabase.from(table).upsert(mappedData);
                 if (error) throw error;
                 return true;
             } catch (err) {
