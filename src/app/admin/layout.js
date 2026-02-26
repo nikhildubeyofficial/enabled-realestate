@@ -92,12 +92,12 @@ export default function AdminLayout({ children }) {
                 onKeyDown={(e) => e.key === 'Enter' && setMobileMenuOpen(false)}
                 className={`fixed inset-0 bg-black/50 z-20 transition-opacity md:hidden ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             />
-            {/* Sidebar — in flow on desktop (no overlap), overlay on mobile only */}
-            <aside className={`flex flex-col bg-white border-r border-gray-200 transition-all duration-300 shadow-sm overflow-y-auto
-                fixed left-0 top-0 bottom-0 z-30 w-64 transform transition-transform duration-300
-                md:relative md:left-auto md:top-auto md:bottom-auto md:z-0 md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0
+            {/* Sidebar — only fixed on mobile (max-md); on desktop it stays in flow so content is not overlapped */}
+            <aside className={`flex flex-col bg-white border-r border-gray-200 shadow-sm overflow-y-auto
+                max-md:fixed max-md:left-0 max-md:top-0 max-md:bottom-0 max-md:z-30 max-md:w-[min(280px,85vw)] max-md:max-w-[280px] max-md:transform max-md:transition-transform max-md:duration-300 max-md:ease-out
+                md:sticky md:top-0 md:h-screen md:shrink-0 md:transition-[width] md:duration-300
                 ${isSidebarOpen ? 'md:w-64' : 'md:w-20'}
-                ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                ${mobileMenuOpen ? 'max-md:translate-x-0 max-md:shadow-xl' : 'max-md:-translate-x-full'}`}>
                 <div className="p-6 flex items-center gap-3 border-b border-gray-100 shrink-0">
                     <div className="w-8 h-8 bg-[#f0312f] rounded flex items-center justify-center text-white font-bold text-lg shrink-0">E</div>
                     {isSidebarOpen && <span className="font-black text-xl tracking-tight text-gray-800">Admin.</span>}

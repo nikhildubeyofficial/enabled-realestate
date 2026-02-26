@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
@@ -7,6 +8,8 @@ import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { Trash2, ShoppingCart, FileText, ArrowRight, ChevronLeft, Minus, Plus, Shield } from 'lucide-react';
+
+const MAX_QUANTITY = 9;
 
 export default function CartPage() {
   const router = useRouter();
@@ -18,6 +21,7 @@ export default function CartPage() {
     clearCart,
     cartTotal,
   } = useCart();
+  const [quantityMessage, setQuantityMessage] = useState(null);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID', {
@@ -30,6 +34,11 @@ export default function CartPage() {
   const handleRemoveItem = (id) => removeFromCart(id);
   const handleUpdateQuantity = (id, currentQty, delta) => {
     const newQty = currentQty + delta;
+    if (newQty > MAX_QUANTITY) {
+      setQuantityMessage(`Maximum quantity per item is ${MAX_QUANTITY}.`);
+      setTimeout(() => setQuantityMessage(null), 3000);
+      return;
+    }
     if (newQty >= 1) updateQuantity(id, newQty);
   };
 
@@ -54,6 +63,12 @@ export default function CartPage() {
                 : 'Your cart is empty'}
             </p>
           </div>
+
+          {quantityMessage && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium" role="alert">
+              {quantityMessage}
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
             {/* Cart items column */}
@@ -105,26 +120,32 @@ export default function CartPage() {
                             </p>
                           </div>
                           <div className="flex flex-wrap items-center gap-3">
-                            <div className="inline-flex items-center border border-gray-200 rounded-xl bg-gray-50/80 overflow-hidden">
-                              <button
-                                type="button"
-                                onClick={() => handleUpdateQuantity(item.id, item.quantity, -1)}
-                                className="p-2.5 hover:bg-white transition-colors text-gray-600 disabled:opacity-40"
-                                aria-label="Decrease quantity"
-                              >
-                                <Minus className="w-4 h-4" />
-                              </button>
-                              <span className="w-10 text-center font-bold text-gray-900 tabular-nums">
-                                {item.quantity}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => handleUpdateQuantity(item.id, item.quantity, 1)}
-                                className="p-2.5 hover:bg-white transition-colors text-gray-600"
-                                aria-label="Increase quantity"
-                              >
-                                <Plus className="w-4 h-4" />
-                              </button>
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Qty</span>
+                              <div className="inline-flex items-center border-2 border-gray-200 rounded-xl bg-gray-50/80 overflow-hidden">
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, -1)}
+                                  disabled={(item.quantity || 1) <= 1}
+                                  className="p-2.5 sm:p-3 hover:bg-white transition-colors text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                                  aria-label="Decrease quantity"
+                                >
+                                  <Minus className="w-4 h-4" />
+                                </button>
+                                <span className="w-10 sm:w-12 text-center font-bold text-gray-900 tabular-nums text-sm sm:text-base">
+                                  {item.quantity || 1}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, 1)}
+                                  disabled={(item.quantity || 1) >= MAX_QUANTITY}
+                                  className="p-2.5 sm:p-3 hover:bg-white transition-colors text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                                  aria-label="Increase quantity"
+                                >
+                                  <Plus className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <span className="text-[10px] text-gray-400">Max {MAX_QUANTITY} per item</span>
                             </div>
                             <button
                               type="button"

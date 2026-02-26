@@ -83,6 +83,7 @@ export function CartProvider({ children }) {
         }
     }, [cartItems, isInitialized, cartKey]);
 
+    const MAX_QUANTITY = 9;
     const addToCart = (product) => {
         // Normalize MongoDB _id → id so deduplication always works
         const normalizedId = product._id || product.id || String(Math.random());
@@ -96,8 +97,9 @@ export function CartProvider({ children }) {
         setCartItems((prevItems) => {
             const existingItem = prevItems.find((item) => item.id === normalizedId);
             if (existingItem) {
+                const nextQty = Math.min((existingItem.quantity || 1) + 1, MAX_QUANTITY);
                 return prevItems.map((item) =>
-                    item.id === normalizedId ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+                    item.id === normalizedId ? { ...item, quantity: nextQty } : item
                 );
             }
             return [...prevItems, { ...normalizedProduct, quantity: 1 }];
@@ -111,9 +113,10 @@ export function CartProvider({ children }) {
 
     const updateQuantity = (productId, quantity) => {
         if (quantity < 1) return;
+        const capped = Math.min(Math.max(1, quantity), 9);
         setCartItems((prevItems) =>
             prevItems.map((item) =>
-                item.id === productId ? { ...item, quantity } : item
+                item.id === productId ? { ...item, quantity: capped } : item
             )
         );
     };
