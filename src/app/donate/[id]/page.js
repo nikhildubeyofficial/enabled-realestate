@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { ChevronLeft, Lightbulb } from 'lucide-react';
 
 const children = [
     {
@@ -150,9 +151,10 @@ export default function DonatePage() {
                         {/* Back button */}
                         <button
                             onClick={() => router.push('/be-a-donor')}
-                            className="mb-6 text-gray-600 hover:text-gray-900 flex items-center gap-2 transition-colors"
+                            className="mb-6 text-gray-600 hover:text-gray-900 flex items-center gap-2 transition-colors min-h-[44px]"
                         >
-                            <span>←</span> Back to Children
+                            <ChevronLeft className="w-4 h-4 shrink-0" aria-hidden />
+                            Back to Children
                         </button>
 
                         {/* Validation errors */}
@@ -252,7 +254,10 @@ export default function DonatePage() {
                                         </label>
                                     ))}
                                 </div>
-                                <p className="text-xs text-gray-500 mt-4">💡 Select a duration to support {child.name} over multiple months</p>
+                                <p className="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
+                                    <Lightbulb className="w-3.5 h-3.5 shrink-0 text-amber-500" aria-hidden />
+                                    Select a duration to support {child.name} over multiple months
+                                </p>
                             </div>
 
                             {/* Donor Information */}

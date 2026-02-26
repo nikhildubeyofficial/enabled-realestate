@@ -3,8 +3,47 @@ import path from 'path';
 import { supabase } from './supabase';
 
 const DATA_DIR = path.join(process.cwd(), 'src/data');
+// Longer TTLs = fewer DB hits; invalidated on write
+const CACHE_TTL_MS = 2 * 60 * 1000;       // 2 min products, orders, donations
+const USERS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 min users (auth speed; invalidated on signup)
 
 const getFilePath = (filename) => path.join(DATA_DIR, filename);
+
+const memoryCache = new Map();
+const cacheTimestamps = new Map();
+const pendingReads = new Map(); // request coalescing: one in-flight read per key
+
+function getCached(key) {
+    const ts = cacheTimestamps.get(key);
+    const ttl = key === 'users.json' ? USERS_CACHE_TTL_MS : CACHE_TTL_MS;
+    if (ts && Date.now() - ts < ttl) {
+        return memoryCache.get(key);
+    }
+    return undefined;
+}
+
+/** Returns cached value even if expired (for stale-while-revalidate). */
+function getStale(key) {
+    return memoryCache.get(key);
+}
+
+/** True if cache is missing or expired and we should refresh in background. */
+function isStale(key) {
+    const ts = cacheTimestamps.get(key);
+    const ttl = key === 'users.json' ? USERS_CACHE_TTL_MS : CACHE_TTL_MS;
+    return !ts || Date.now() - ts >= ttl;
+}
+
+function setCached(key, value) {
+    memoryCache.set(key, value);
+    cacheTimestamps.set(key, Date.now());
+}
+
+function invalidateCached(filename) {
+    memoryCache.delete(filename);
+    cacheTimestamps.delete(filename);
+    pendingReads.delete(filename);
+}
 
 // Supabase helper: Maps JSON filenames to table names
 const TABLE_MAP = {
@@ -75,39 +114,63 @@ const FIELD_MAPPINGS = {
     }
 };
 
-export async function readData(filename) {
+async function doReadData(filename) {
     if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         const table = TABLE_MAP[filename];
         if (table) {
             try {
                 const { data, error } = await supabase.from(table).select('*');
                 if (error) throw error;
-
-                // Map from Supabase lowercase to CamelCase
-                if (FIELD_MAPPINGS[table]) {
-                    return data.map(FIELD_MAPPINGS[table].from);
-                }
-                return data || [];
+                const result = FIELD_MAPPINGS[table] ? data.map(FIELD_MAPPINGS[table].from) : (data || []);
+                setCached(filename, result);
+                return result;
             } catch (err) {
-                console.error(`Supabase read error for ${table}:`, err);
+                const msg = String(err?.message ?? '');
+                const details = String(err?.details ?? '');
+                const isNetwork = msg.includes('fetch failed') || msg.includes('Timeout') || details.includes('Timeout') || details.includes('ECONNREFUSED') || err?.code === 'ECONNREFUSED';
+                if (isNetwork) {
+                    console.warn(`[db] Supabase unreachable (network/timeout) for ${table}, using local data.`);
+                } else {
+                    console.error(`Supabase read error for ${table}:`, err);
+                }
             }
         }
     }
-
     try {
         const filePath = getFilePath(filename);
-        if (!fs.existsSync(filePath)) {
-            return [];
-        }
+        if (!fs.existsSync(filePath)) return [];
         const content = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(content || '[]');
+        const result = JSON.parse(content || '[]');
+        setCached(filename, result);
+        return result;
     } catch (error) {
         console.error(`Error reading ${filename}:`, error);
         return [];
     }
 }
 
+export async function readData(filename) {
+    const cached = getCached(filename);
+    if (cached !== undefined) return cached;
+
+    const stale = getStale(filename);
+    if (stale !== undefined && isStale(filename)) {
+        doReadData(filename).catch(() => {}).finally(() => {}); // refresh in background
+    }
+    if (stale !== undefined) return stale; // instant: return previous data while revalidating
+
+    let promise = pendingReads.get(filename);
+    if (promise) return promise;
+
+    promise = doReadData(filename).finally(() => {
+        pendingReads.delete(filename);
+    });
+    pendingReads.set(filename, promise);
+    return promise;
+}
+
 export async function writeData(filename, data) {
+    invalidateCached(filename);
     if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         const table = TABLE_MAP[filename];
         if (table) {

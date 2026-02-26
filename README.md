@@ -29,6 +29,27 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Deployment
+
+### Environment variables
+
+Copy `.env.example` to `.env.local` and set:
+
+- **`NEXT_PUBLIC_SUPABASE_URL`** – Your Supabase project URL (optional; if unset, the app reads from local `src/data/*.json`).
+- **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** – Supabase anonymous key (optional; required if using Supabase).
+- **`NEXT_PUBLIC_INSTA_IMAGE_BASE`** – Base URL for Instagram images (optional).
+
+For production, configure Supabase (or another database) so signups, orders, and donations persist. Without it, writes fall back to local JSON files, which are not reliable on serverless (e.g. Vercel).
+
+### Build and run
+
+```bash
+npm run build
+npm run start
+```
+
+In your hosting dashboard (e.g. Vercel), add the same `NEXT_PUBLIC_*` variables. The app uses relative `/api/...` URLs, so no `localhost` or base-URL changes are needed for deployment.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

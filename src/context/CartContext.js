@@ -1,33 +1,19 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+    const { user } = useAuth();
     const [cartItems, setCartItems] = useState([]);
     const [isInitialized, setIsInitialized] = useState(false);
 
-    // Key depends on the logged-in user
-    const [cartKey, setCartKey] = useState('enabled_cart_guest');
-
-    // Update cart key when user changes
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const savedUser = localStorage.getItem('enabled_user');
-            if (savedUser) {
-                try {
-                    const user = JSON.parse(savedUser);
-                    const userId = user.id || user._id;
-                    setCartKey(`enabled_cart_${userId}`);
-                } catch (e) {
-                    setCartKey('enabled_cart_guest');
-                }
-            } else {
-                setCartKey('enabled_cart_guest');
-            }
-        }
-    }, []);
+    // Key depends on the logged-in user so cart updates without page reload
+    const cartKey = typeof window !== 'undefined'
+        ? (user ? `enabled_cart_${user.id || user._id}` : 'enabled_cart_guest')
+        : 'enabled_cart_guest';
 
     // Load cart from localStorage when the key changes
     useEffect(() => {

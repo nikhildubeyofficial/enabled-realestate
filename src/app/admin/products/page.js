@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { FileText, Pencil, Trash2, X } from 'lucide-react';
 
 export default function AdminProductsPage() {
     const [products, setProducts] = useState([]);
@@ -124,15 +125,17 @@ export default function AdminProductsPage() {
                                 </td>
                                 <td className="px-6 py-4">
                                     {product.pdfFile ? (
-                                        <span className="text-blue-500 font-black text-[10px] uppercase">📄 Linked</span>
+                                        <span className="text-blue-500 font-black text-[10px] uppercase flex items-center gap-1">
+                                            <FileText className="w-3 h-3 shrink-0" aria-hidden /> Linked
+                                        </span>
                                     ) : (
                                         <span className="text-gray-300 font-black text-[10px] uppercase">No PDF</span>
                                     )}
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex gap-2">
-                                        <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors">✏️</button>
-                                        <button className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors">🗑️</button>
+                                        <button className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Edit"><Pencil className="w-4 h-4" /></button>
+                                        <button className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Delete"><Trash2 className="w-4 h-4" /></button>
                                     </div>
                                 </td>
                             </tr>
@@ -147,7 +150,7 @@ export default function AdminProductsPage() {
                     <div className="bg-white rounded-3xl w-full max-w-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-200 my-8">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-2xl font-black text-gray-800">Add New Product</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg" aria-label="Close"><X className="w-6 h-6" /></button>
                         </div>
                         <form onSubmit={handleAddProduct} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

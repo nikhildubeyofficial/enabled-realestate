@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
+import { User, Info, ShoppingBag, TrendingUp, Heart, ShoppingCart, Menu } from 'lucide-react';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,24 +40,28 @@ export default function Navbar() {
                 <Link href="/" className="text-xl font-bold">
                     Enabled.
                 </Link>
-                <div className="hidden md:flex gap-6 items-center">
-                    <button className="hover:underline" onClick={handleAboutUsClick}>About Us</button>
-                    <Link href="/products" className="hover:underline">
-                        Impact Shop
+                <div className="hidden md:flex gap-5 items-center">
+                    <button className="flex items-center gap-1.5 hover:underline min-h-[44px]" onClick={handleAboutUsClick}>
+                        <Info className="w-4 h-4 shrink-0" aria-hidden /> About Us
+                    </button>
+                    <Link href="/products" className="flex items-center gap-1.5 hover:underline min-h-[44px] items-center">
+                        <ShoppingBag className="w-4 h-4 shrink-0" aria-hidden /> Impact Shop
                     </Link>
-                    <Link href="/impact-outcomes" className="hover:underline">
-                        Impact Outcomes
+                    <Link href="/impact-outcomes" className="flex items-center gap-1.5 hover:underline min-h-[44px] items-center">
+                        <TrendingUp className="w-4 h-4 shrink-0" aria-hidden /> Impact Outcomes
                     </Link>
-                    <Link href="/be-a-donor" className="hover:underline">
-                        Be a Donor
+                    <Link href="/be-a-donor" className="flex items-center gap-1.5 hover:underline min-h-[44px] items-center">
+                        <Heart className="w-4 h-4 shrink-0" aria-hidden /> Be a Donor
                     </Link>
-                    <Link href="/cart" className="hover:underline flex items-center gap-1">
-                        Cart {cartCount > 0 && <span className="bg-white text-[#F0312F] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{cartCount}</span>}
+                    <Link href="/cart" className="flex items-center gap-1.5 hover:underline min-h-[44px] items-center">
+                        <ShoppingCart className="w-4 h-4 shrink-0" aria-hidden /> Cart
+                        {cartCount > 0 && <span className="bg-white text-[#F0312F] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{cartCount}</span>}
                     </Link>
                     {user ? (
                         <div className="flex items-center gap-4">
-                            <Link href="/profile" className="flex items-center gap-2 bg-white text-[#F0312F] px-4 py-2 rounded font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                👤 {user.name}
+                            <Link href="/profile" className="flex items-center gap-2 bg-white text-[#F0312F] px-4 py-2 rounded font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg min-h-[44px] items-center">
+                                <User className="w-4 h-4 shrink-0" aria-hidden />
+                                {user.name}
                             </Link>
                             <button onClick={logout} className="text-white hover:underline transition-all">Logout</button>
                         </div>
@@ -66,48 +71,44 @@ export default function Navbar() {
                         </button>
                     )}
                 </div>
-                <button className="md:hidden" onClick={handleNavbarToggle}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-menu"
-                        aria-hidden="true"
-                    >
-                        <line x1="4" x2="20" y1="12" y2="12"></line>
-                        <line x1="4" x2="20" y1="6" y2="6"></line>
-                        <line x1="4" x2="20" y1="18" y2="18"></line>
-                    </svg>
+                <button className="md:hidden p-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center" onClick={handleNavbarToggle} aria-label="Open menu">
+                    <Menu className="w-6 h-6" aria-hidden />
                 </button>
             </div>
             {/* Mobile Menu */}
             {isOpen && (
                 <div className="md:hidden bg-[#F0312F] px-4 pt-2 pb-4 space-y-1 shadow-lg absolute w-full left-0">
-                    <button className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700" onClick={handleAboutUsClick}>
-                        About Us
+                    <button className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center gap-2 min-h-[44px] items-center" onClick={() => { handleAboutUsClick(); setIsOpen(false); }}>
+                        <Info className="w-4 h-4 shrink-0" aria-hidden /> About Us
                     </button>
-                    <Link href="/products" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700">
-                        Impact Shop
+                    <Link href="/products" className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center gap-2 min-h-[44px] items-center" onClick={() => setIsOpen(false)}>
+                        <ShoppingBag className="w-4 h-4 shrink-0" aria-hidden /> Impact Shop
                     </Link>
-                    <Link href="/impact-outcomes" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700">
-                        Impact Outcomes
+                    <Link href="/impact-outcomes" className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center gap-2 min-h-[44px] items-center" onClick={() => setIsOpen(false)}>
+                        <TrendingUp className="w-4 h-4 shrink-0" aria-hidden /> Impact Outcomes
                     </Link>
-                    <Link href="/be-a-donor" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700">
-                        Be a Donor
+                    <Link href="/be-a-donor" className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center gap-2 min-h-[44px] items-center" onClick={() => setIsOpen(false)}>
+                        <Heart className="w-4 h-4 shrink-0" aria-hidden /> Be a Donor
                     </Link>
-                    <Link href="/cart" className="block w-full text-left px-3 py-2 rounded-md font-medium hover:bg-red-700 flex items-center justify-between">
-                        <span>Cart</span>
+                    <Link href="/cart" className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center justify-between min-h-[44px] items-center" onClick={() => setIsOpen(false)}>
+                        <span className="flex items-center gap-2"><ShoppingCart className="w-4 h-4 shrink-0" aria-hidden /> Cart</span>
                         {cartCount > 0 && <span className="bg-white text-[#F0312F] text-[10px] font-bold px-2 py-0.5 rounded-full">{cartCount}</span>}
                     </Link>
-                    <button className="block w-full mt-2 bg-white text-[#F0312F] px-4 py-2 rounded hover:bg-gray-100 transition-all duration-300 text-center font-bold hover:-translate-y-1 hover:shadow-lg" onClick={handleSignupLogin}>
-                        Signup / Login
-                    </button>
+                    {user ? (
+                        <>
+                            <Link href="/profile" className="block w-full text-left px-3 py-3 rounded-md font-medium hover:bg-red-700 flex items-center gap-2 min-h-[44px] items-center" onClick={() => setIsOpen(false)}>
+                                <User className="w-4 h-4 shrink-0" aria-hidden />
+                                Profile
+                            </Link>
+                            <button className="block w-full mt-2 bg-white text-[#F0312F] px-4 py-2 rounded hover:bg-gray-100 transition-all duration-300 text-center font-bold" onClick={() => { setIsOpen(false); logout(); }}>
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <button className="block w-full mt-2 bg-white text-[#F0312F] px-4 py-2 rounded hover:bg-gray-100 transition-all duration-300 text-center font-bold hover:-translate-y-1 hover:shadow-lg" onClick={() => { setIsOpen(false); handleSignupLogin(); }}>
+                            Signup / Login
+                        </button>
+                    )}
                 </div>
             )}
         </nav>

@@ -11,6 +11,7 @@ export default function BillingPage() {
     const router = useRouter();
     const { user } = useAuth();
     const { cartItems, cartTotal, clearCart } = useCart();
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: user?.name || "",
         phone: "",
@@ -44,6 +45,7 @@ export default function BillingPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
 
         if (!user) {
             alert("Please log in to place an order.");
@@ -51,6 +53,7 @@ export default function BillingPage() {
             return;
         }
 
+        setIsSubmitting(true);
         const address = {
             fullName: formData.fullName,
             phone: formData.phone,
@@ -85,6 +88,8 @@ export default function BillingPage() {
         } catch (error) {
             console.error("Order error:", error);
             alert("❌ An error occurred while placing your order.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -204,9 +209,17 @@ export default function BillingPage() {
 
                                     <button
                                         type="submit"
-                                        className="w-full sm:w-auto px-10 py-4 bg-[#db4444] hover:bg-red-600 text-white font-bold rounded shadow-md transition-all active:scale-95 mt-4"
+                                        disabled={isSubmitting}
+                                        className="w-full sm:w-auto px-10 py-4 bg-[#db4444] hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded shadow-md transition-all active:scale-95 mt-4 flex items-center justify-center gap-2 min-h-[48px]"
                                     >
-                                        Place Order
+                                        {isSubmitting ? (
+                                            <>
+                                                <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden />
+                                                Placing order…
+                                            </>
+                                        ) : (
+                                            'Place Order'
+                                        )}
                                     </button>
                                 </form>
                             </div>

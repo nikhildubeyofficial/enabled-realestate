@@ -7,24 +7,38 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 
+const formatCurrency = (amount) =>
+    new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount || 0);
+
 export default function ProfilePage() {
     const router = useRouter();
     const { user, loading, logout } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
+    const [orders, setOrders] = useState([]);
+    const [ordersLoading, setOrdersLoading] = useState(false);
 
     useEffect(() => {
         if (!loading) {
             setIsLoading(false);
-            if (!user) {
-                // Not forcing redirect, user might want to see the login prompt
-            }
         }
     }, [user, loading]);
+
+    useEffect(() => {
+        if (!user?.email) return;
+        setOrdersLoading(true);
+        fetch(`/api/orders?email=${encodeURIComponent(user.email)}`)
+            .then((res) => res.ok ? res.json() : [])
+            .then((data) => setOrders(Array.isArray(data) ? data.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)) : []))
+            .catch(() => setOrders([]))
+            .finally(() => setOrdersLoading(false));
+    }, [user?.email]);
 
     const handleLogout = () => {
         logout();
         router.push('/login');
     };
+
+    const recentOrders = orders.slice(0, 5);
 
     return (
         <div className="font-sans">
@@ -34,9 +48,11 @@ export default function ProfilePage() {
                     <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-8 space-y-6">
                         <div className="flex items-center justify-between border-b pb-4">
                             <h2 className="text-2xl font-bold text-gray-800 tracking-tight">Profile</h2>
-                            {user && <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-                                {user.name ? user.name[0] : 'U'}
-                            </div>}
+                            {user && (
+                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                    {user.name ? user.name[0] : 'U'}
+                                </div>
+                            )}
                         </div>
 
                         {isLoading ? (
@@ -51,7 +67,7 @@ export default function ProfilePage() {
                                 <div className="group">
                                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Full Name</p>
                                     <p className="text-lg text-gray-800 font-medium group-hover:text-blue-600 transition-colors">
-                                        {user.name || "N/A"}
+                                        {user.name || 'N/A'}
                                     </p>
                                 </div>
 
@@ -60,6 +76,38 @@ export default function ProfilePage() {
                                     <p className="text-lg text-gray-800 font-medium group-hover:text-blue-600 transition-colors">
                                         {user.email}
                                     </p>
+                                </div>
+
+                                {/* Order history */}
+                                <div className="pt-2 border-t border-gray-100">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Order History</p>
+                                        {orders.length > 0 && (
+                                            <Link href="/orders" className="text-sm font-bold text-[#f0312f] hover:underline">
+                                                View all
+                                            </Link>
+                                        )}
+                                    </div>
+                                    {ordersLoading ? (
+                                        <div className="space-y-2">
+                                            {[1, 2, 3].map((i) => (
+                                                <div key={i} className="h-14 bg-gray-100 rounded-lg animate-pulse" />
+                                            ))}
+                                        </div>
+                                    ) : recentOrders.length === 0 ? (
+                                        <p className="text-gray-500 text-sm">No orders yet.</p>
+                                    ) : (
+                                        <ul className="space-y-2">
+                                            {recentOrders.map((order) => (
+                                                <li key={order.id || order._id} className="flex justify-between items-center text-sm py-2 border-b border-gray-50 last:border-0">
+                                                    <span className="text-gray-700 truncate mr-2">
+                                                        {(order.products || order.items || []).map((p) => p.name).filter(Boolean).join(', ') || 'Order'}
+                                                    </span>
+                                                    <span className="font-semibold text-gray-900 shrink-0">{formatCurrency(order.totalPrice || order.total)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                 </div>
 
                                 <div className="pt-4 space-y-3">

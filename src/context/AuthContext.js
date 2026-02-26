@@ -33,8 +33,6 @@ export function AuthProvider({ children }) {
             if (data.success) {
                 setUser(data.user);
                 localStorage.setItem('enabled_user', JSON.stringify(data.user));
-                // Force reload to refresh all context states (e.g. CartContext key)
-                window.location.reload();
                 return { success: true };
             } else {
                 return { success: false, message: data.message };
@@ -71,8 +69,6 @@ export function AuthProvider({ children }) {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('enabled_user');
-        // Force reload to refresh all context states
-        window.location.reload();
     };
 
     return (

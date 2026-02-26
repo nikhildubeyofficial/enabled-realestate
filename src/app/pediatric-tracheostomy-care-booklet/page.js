@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { ClipboardList, UserCircle, Film, Phone, BookOpen, Heart, Globe, CheckCircle } from 'lucide-react';
 
 // These are the official PDF links from the enabled.ngo site
 // They link to Google Drive hosted PDFs
@@ -73,34 +74,14 @@ export default function PediatricCareBookletPage() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">Care Booklet Contents</h2>
               <div className="space-y-5">
                 {[
-                  {
-                    color: 'blue',
-                    icon: '📋',
-                    title: 'List of necessary medical supplies and equipment',
-                    desc: 'A complete inventory of essential items required for pediatric tracheostomy care.',
-                  },
-                  {
-                    color: 'green',
-                    icon: '🧑‍⚕️',
-                    title: 'Instructions for pediatric tracheostomy care training',
-                    desc: 'Step-by-step guidance for safely performing and managing tracheostomy care.',
-                  },
-                  {
-                    color: 'purple',
-                    icon: '🎬',
-                    title: 'List of must-watch videos for Indonesian pediatric tracheostomy patient parents',
-                    desc: 'Curated educational videos to support parents in caring for their children.',
-                  },
-                  {
-                    color: 'red',
-                    icon: '📞',
-                    title: 'List of necessary contacts',
-                    desc: 'Important support resources to reach when needed.',
-                  },
+                  { Icon: ClipboardList, bg: 'bg-blue-100', color: 'text-blue-600', title: 'List of necessary medical supplies and equipment', desc: 'A complete inventory of essential items required for pediatric tracheostomy care.' },
+                  { Icon: UserCircle, bg: 'bg-green-100', color: 'text-green-600', title: 'Instructions for pediatric tracheostomy care training', desc: 'Step-by-step guidance for safely performing and managing tracheostomy care.' },
+                  { Icon: Film, bg: 'bg-purple-100', color: 'text-purple-600', title: 'List of must-watch videos for Indonesian pediatric tracheostomy patient parents', desc: 'Curated educational videos to support parents in caring for their children.' },
+                  { Icon: Phone, bg: 'bg-red-100', color: 'text-red-600', title: 'List of necessary contacts', desc: 'Important support resources to reach when needed.' },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-${item.color}-100 text-xl`}>
-                      {item.icon}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${item.bg} ${item.color}`}>
+                      <item.Icon className="w-5 h-5" aria-hidden />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800 text-sm">{item.title}</h3>
@@ -117,13 +98,15 @@ export default function PediatricCareBookletPage() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">Why Our Booklet Matters</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { icon: '📚', title: 'Comprehensive Guide', desc: 'All-in-one resource for tracheostomy care' },
-                { icon: '❤️', title: 'Family-Friendly', desc: 'Accessible language for all family members' },
-                { icon: '🌏', title: 'Bilingual', desc: 'Available in Bahasa Indonesia and English' },
-                { icon: '✅', title: 'Verified Content', desc: 'Reviewed by medical professionals' },
+                { Icon: BookOpen, title: 'Comprehensive Guide', desc: 'All-in-one resource for tracheostomy care' },
+                { Icon: Heart, title: 'Family-Friendly', desc: 'Accessible language for all family members' },
+                { Icon: Globe, title: 'Bilingual', desc: 'Available in Bahasa Indonesia and English' },
+                { Icon: CheckCircle, title: 'Verified Content', desc: 'Reviewed by medical professionals' },
               ].map((item, idx) => (
                 <div key={idx} className="text-center">
-                  <div className="text-4xl mb-3">{item.icon}</div>
+                  <div className="inline-flex w-12 h-12 items-center justify-center rounded-full bg-white/80 mb-3">
+                    <item.Icon className="w-6 h-6 text-gray-700" aria-hidden />
+                  </div>
                   <h3 className="text-base font-semibold text-gray-800 mb-1">{item.title}</h3>
                   <p className="text-gray-500 text-sm">{item.desc}</p>
                 </div>

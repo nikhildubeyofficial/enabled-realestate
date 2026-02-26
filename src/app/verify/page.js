@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Mail } from 'lucide-react';
 
 export default function VerifyPage() {
     return (
@@ -12,7 +13,7 @@ export default function VerifyPage() {
                 <main className="flex-grow flex items-center justify-center bg-[#fafafa] py-12 px-4">
                     <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-10 text-center flex flex-col items-center gap-6 border border-gray-100">
                         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-2">
-                            <span className="text-3xl">📧</span>
+                            <Mail className="w-8 h-8 text-[#f0312f]" aria-hidden />
                         </div>
                         <h1 className="text-2xl font-black text-gray-900 tracking-tight">
                             Please verify your email

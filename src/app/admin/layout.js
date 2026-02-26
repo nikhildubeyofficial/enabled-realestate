@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { LayoutDashboard, ShoppingBag, Heart, Package, Globe, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
     const pathname = usePathname();
@@ -11,7 +12,6 @@ export default function AdminLayout({ children }) {
     const [isAuthChecking, setIsAuthChecking] = useState(true);
 
     useEffect(() => {
-        // Auth check for all /admin routes except /admin/login
         if (pathname !== '/admin/login') {
             const token = sessionStorage.getItem('admin_token');
             if (!token) {
@@ -31,11 +31,11 @@ export default function AdminLayout({ children }) {
     };
 
     const navItems = [
-        { name: 'Dashboard', href: '/admin', icon: '📊' },
-        { name: 'Products', href: '/admin/products', icon: '🛍️' },
-        { name: 'Donations', href: '/admin/donations', icon: '💝' },
-        { name: 'Orders', href: '/admin/orders', icon: '📦' },
-        { name: 'Go to Website', href: '/', icon: '🌐' },
+        { name: 'Dashboard', href: '/admin', Icon: LayoutDashboard },
+        { name: 'Products', href: '/admin/products', Icon: ShoppingBag },
+        { name: 'Donations', href: '/admin/donations', Icon: Heart },
+        { name: 'Orders', href: '/admin/orders', Icon: Package },
+        { name: 'Go to Website', href: '/', Icon: Globe },
     ];
 
     if (isAuthChecking) {
@@ -67,12 +67,12 @@ export default function AdminLayout({ children }) {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isActive
+                                className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 min-h-[44px] ${isActive
                                     ? 'bg-red-50 text-[#f0312f] font-bold shadow-sm'
                                     : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 font-medium'
                                     }`}
                             >
-                                <span className="text-xl">{item.icon}</span>
+                                <item.Icon className="w-5 h-5 shrink-0" aria-hidden />
                                 {isSidebarOpen && <span>{item.name}</span>}
                             </Link>
                         );
@@ -80,9 +80,9 @@ export default function AdminLayout({ children }) {
 
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-gray-500 hover:bg-red-50 hover:text-[#f0312f] font-medium"
+                        className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-gray-500 hover:bg-red-50 hover:text-[#f0312f] font-medium min-h-[44px]"
                     >
-                        <span className="text-xl">🚪</span>
+                        <LogOut className="w-5 h-5 shrink-0" aria-hidden />
                         {isSidebarOpen && <span>Logout</span>}
                     </button>
                 </nav>
@@ -94,9 +94,10 @@ export default function AdminLayout({ children }) {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                            aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
                         >
-                            {isSidebarOpen ? '⬅️' : '➡️'}
+                            {isSidebarOpen ? <ChevronLeft className="w-5 h-5" aria-hidden /> : <ChevronRight className="w-5 h-5" aria-hidden />}
                         </button>
                         <h1 className="text-xl font-bold text-gray-800">
                             {navItems.find(i => i.href === pathname)?.name || 'Admin'}

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Image from 'next/image';
 
 const children = [
   {
@@ -59,23 +58,35 @@ export default function BeADonorPage() {
       <div className="flex flex-col min-h-screen font-inter">
         <Navbar />
         <main className="flex-grow bg-gray-50">
-          {/* Hero */}
-          <div className="relative h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px] flex items-center justify-center overflow-hidden">
-            <img
-              src="/images/image.png"
-              alt="Hero Background"
-              className="absolute inset-0 w-full h-full object-cover object-center"
-            />
-            {/* <div className="absolute inset-0 bg-black opacity-50" />
-            <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                KUAT BERSAMA ENABLED.
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
-                Setiap anak berhak mendapatkan kesempatan yang sama untuk meraih impian mereka. Bersama kita bisa memberikan harapan dan dukungan bagi anak-anak yang membutuhkan. Bantuan Anda dapat mengubah hidup mereka dan membuka jalan menuju masa depan yang lebih cerah.
-              </p>
-            </div> */}
-          </div>
+          {/* Hero: single image (text is on the image). One image, proper fit on all devices. */}
+          <section
+  className="w-full bg-gray-100"
+  aria-label="Hero"
+>
+  <div
+    className="
+      w-full
+      flex items-center justify-center
+      overflow-hidden
+    "
+  >
+    <img
+      src="/images/image.png"
+      alt="Kuat bersama Enabled – Be a donor"
+      className="
+        w-full h-auto
+        object-contain
+        max-h-[90vh]
+
+        scale-125        /* mobile zoom */
+        sm:scale-100     /* reset on larger devices */
+
+        transition-transform duration-300
+      "
+      loading="eager"
+    />
+  </div>
+</section>
 
           {/* Listing */}
           <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
