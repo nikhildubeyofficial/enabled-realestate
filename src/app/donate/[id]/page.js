@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 import { ChevronLeft, Lightbulb } from 'lucide-react';
 
 const DONATION_AMOUNTS = [
@@ -270,18 +269,11 @@ export default function DonatePage() {
                                 </p>
                             </div>
 
-                            {/* Donor Information */}
+                            {/* Donor Information – guest only; no login required */}
                             <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xl font-bold text-gray-900">Your Information</h3>
-                                    <Link href="/login" className="text-sm text-[#F0312F] hover:underline font-semibold">
-                                        Login or Sign Up
-                                    </Link>
-                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Your Information</h3>
                                 <p className="text-sm text-gray-600 mb-4">
-                                    You can{' '}
-                                    <Link href="/login" className="text-[#F0312F] hover:underline">login</Link>
-                                    {' '}or complete the information below to continue as a guest.
+                                    Enter your details below to complete the donation. No account required.
                                 </p>
                                 <div className="space-y-4">
                                     <div>

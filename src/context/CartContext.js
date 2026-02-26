@@ -83,9 +83,14 @@ export function CartProvider({ children }) {
         }
     }, [cartItems, isInitialized, cartKey]);
 
-    const MAX_QUANTITY = 9;
+    const DEFAULT_MAX_QUANTITY = 9;
+
+    const isOutOfStock = (product) =>
+        product.status === 'Out of Stock' || product.inStock === false;
+
     const addToCart = (product) => {
-        // Normalize MongoDB _id → id so deduplication always works
+        if (isOutOfStock(product)) return;
+        const maxQty = Math.max(1, Math.min(99, Number(product.quantity) || DEFAULT_MAX_QUANTITY));
         const normalizedId = product._id || product.id || String(Math.random());
         const normalizedProduct = {
             ...product,
@@ -93,16 +98,18 @@ export function CartProvider({ children }) {
             name: product.name || product.title || 'Product',
             price: Number(product.price) || 0,
             image: product.image || product.imageUrl || '/Girly.png',
+            maxQuantity: maxQty,
         };
         setCartItems((prevItems) => {
             const existingItem = prevItems.find((item) => item.id === normalizedId);
             if (existingItem) {
-                const nextQty = Math.min((existingItem.quantity || 1) + 1, MAX_QUANTITY);
+                const cap = existingItem.maxQuantity ?? maxQty;
+                const nextQty = Math.min((existingItem.quantity || 1) + 1, cap);
                 return prevItems.map((item) =>
-                    item.id === normalizedId ? { ...item, quantity: nextQty } : item
+                    item.id === normalizedId ? { ...item, quantity: nextQty, maxQuantity: cap } : item
                 );
             }
-            return [...prevItems, { ...normalizedProduct, quantity: 1 }];
+            return [...prevItems, { ...normalizedProduct, quantity: 1, maxQuantity: maxQty }];
         });
     };
 
@@ -113,11 +120,13 @@ export function CartProvider({ children }) {
 
     const updateQuantity = (productId, quantity) => {
         if (quantity < 1) return;
-        const capped = Math.min(Math.max(1, quantity), 9);
         setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === productId ? { ...item, quantity: capped } : item
-            )
+            prevItems.map((item) => {
+                if (item.id !== productId) return item;
+                const maxQty = item.maxQuantity ?? DEFAULT_MAX_QUANTITY;
+                const capped = Math.min(Math.max(1, quantity), maxQty);
+                return { ...item, quantity: capped };
+            })
         );
     };
 

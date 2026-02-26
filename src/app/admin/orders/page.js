@@ -43,7 +43,9 @@ export default function AdminOrdersPage() {
         }
     };
 
-    const normalized = orders.map(normalizeOrder);
+    const normalized = orders
+        .map(normalizeOrder)
+        .sort((a, b) => (new Date(b.date) || 0) - (new Date(a.date) || 0));
 
     return (
         <div className="space-y-6">

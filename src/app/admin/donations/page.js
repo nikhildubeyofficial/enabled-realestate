@@ -13,6 +13,17 @@ export default function AdminDonorRegistrationsPage() {
         fetchDonations();
     }, []);
 
+    useEffect(() => {
+        const onFocus = () => fetchDonations(true);
+        window.addEventListener('focus', onFocus);
+        const onVisibility = () => { if (document.visibilityState === 'visible') fetchDonations(true); };
+        document.addEventListener('visibilitychange', onVisibility);
+        return () => {
+            window.removeEventListener('focus', onFocus);
+            document.removeEventListener('visibilitychange', onVisibility);
+        };
+    }, []);
+
     const fetchDonations = async (isRefresh = false) => {
         if (isRefresh) setRefreshing(true);
         else setLoading(true);

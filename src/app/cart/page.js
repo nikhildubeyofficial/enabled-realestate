@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { Trash2, ShoppingCart, FileText, ArrowRight, ChevronLeft, Minus, Plus, Shield } from 'lucide-react';
 
-const MAX_QUANTITY = 9;
+const DEFAULT_MAX_QUANTITY = 9;
 
 export default function CartPage() {
   const router = useRouter();
@@ -32,10 +32,11 @@ export default function CartPage() {
   };
 
   const handleRemoveItem = (id) => removeFromCart(id);
-  const handleUpdateQuantity = (id, currentQty, delta) => {
+  const handleUpdateQuantity = (id, currentQty, delta, maxQty = DEFAULT_MAX_QUANTITY) => {
+    const cap = maxQty ?? DEFAULT_MAX_QUANTITY;
     const newQty = currentQty + delta;
-    if (newQty > MAX_QUANTITY) {
-      setQuantityMessage(`Maximum quantity per item is ${MAX_QUANTITY}.`);
+    if (newQty > cap) {
+      setQuantityMessage(`Maximum quantity for this item is ${cap}.`);
       setTimeout(() => setQuantityMessage(null), 3000);
       return;
     }
@@ -112,11 +113,11 @@ export default function CartPage() {
                             />
                           </div>
                           <div className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Qty (max {MAX_QUANTITY})</span>
+                            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Qty (max {item.maxQuantity ?? DEFAULT_MAX_QUANTITY})</span>
                             <div className="inline-flex items-center border-2 border-gray-200 rounded-xl bg-gray-50/80 overflow-hidden w-fit">
                               <button
                                 type="button"
-                                onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, -1)}
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, -1, item.maxQuantity)}
                                 disabled={(item.quantity || 1) <= 1}
                                 className="p-2 sm:p-2.5 hover:bg-white transition-colors text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
                                 aria-label="Decrease quantity"
@@ -128,8 +129,8 @@ export default function CartPage() {
                               </span>
                               <button
                                 type="button"
-                                onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, 1)}
-                                disabled={(item.quantity || 1) >= MAX_QUANTITY}
+                                onClick={() => handleUpdateQuantity(item.id, item.quantity || 1, 1, item.maxQuantity)}
+                                disabled={(item.quantity || 1) >= (item.maxQuantity ?? DEFAULT_MAX_QUANTITY)}
                                 className="p-2 sm:p-2.5 hover:bg-white transition-colors text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
                                 aria-label="Increase quantity"
                               >

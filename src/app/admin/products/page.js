@@ -62,7 +62,7 @@ export default function AdminProductsPage() {
 
     const validateQty = (raw) => {
         const val = raw === '' ? '' : parseInt(raw, 10);
-        return val !== '' && val > 9 ? 'Maximum quantity allowed is 9' : '';
+        return val !== '' && (val < 1 || val > 99) ? 'Max cart quantity must be between 1 and 99' : '';
     };
 
     /* ── ADD ── */
@@ -242,27 +242,26 @@ export default function AdminProductsPage() {
                 </div>
                 <div>
                     <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">
-                        Quantity <span className="text-[#f0312f]">*</span>
-                        <span className="ml-1 text-gray-300 font-medium normal-case">(max 9)</span>
+                        Max cart quantity <span className="text-[#f0312f]">*</span>
+                        <span className="ml-1 text-gray-300 font-medium normal-case">(max a user can add per product, 1–99)</span>
                     </label>
                     <input
-                        required type="number" min="1" max="9"
+                        required type="number" min="1" max="99"
                         className={`w-full p-4 bg-gray-50 border rounded-2xl focus:outline-none focus:ring-2 transition-all font-medium ${qtyError ? 'border-red-400 focus:ring-red-200 focus:border-red-500' : 'border-gray-100 focus:ring-red-100 focus:border-[#f0312f]'}`}
                         value={product.quantity}
                         onChange={onQtyChange}
-                        placeholder="1 – 9"
+                        placeholder="1 – 99"
                     />
                     {qtyError && <p className="mt-1 ml-1 text-xs text-red-500 font-bold">{qtyError}</p>}
                 </div>
             </div>
 
-            {/* Status */}
+            {/* Status: Add modal shows only Available; Edit modal shows Available + Out of Stock (no Discontinued) */}
             <div>
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">Status</label>
                 <select className={inputCls} value={product.status} onChange={(e) => setProduct({ ...product, status: e.target.value })}>
                     <option value="Available">Available</option>
-                    <option value="Out of Stock">Out of Stock</option>
-                    <option value="Discontinued">Discontinued</option>
+                    {isEdit && <option value="Out of Stock">Out of Stock</option>}
                 </select>
             </div>
 

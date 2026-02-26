@@ -233,12 +233,18 @@ export default function ProductsPage() {
                           )}
 
                           <div className="mt-auto pt-4 space-y-2">
-                            <button
-                              className="w-full bg-[#f0312f] text-white py-3 rounded-xl hover:bg-red-700 transition font-black text-sm shadow-lg shadow-red-100 active:scale-95"
-                              onClick={() => handleAddToCart(product)}
-                            >
-                              Add to Cart
-                            </button>
+                            {(product.status === 'Out of Stock' || product.inStock === false) ? (
+                              <div className="w-full py-3 rounded-xl bg-gray-200 text-gray-500 font-black text-sm text-center cursor-not-allowed">
+                                Out of Stock
+                              </div>
+                            ) : (
+                              <button
+                                className="w-full bg-[#f0312f] text-white py-3 rounded-xl hover:bg-red-700 transition font-black text-sm shadow-lg shadow-red-100 active:scale-95"
+                                onClick={() => handleAddToCart(product)}
+                              >
+                                Add to Cart
+                              </button>
+                            )}
 
                             {product.pdfFile && (
                               <button
