@@ -50,7 +50,8 @@ const TABLE_MAP = {
     'users.json': 'users',
     'products.json': 'products',
     'orders.json': 'orders',
-    'donations.json': 'donations'
+    'donations.json': 'donations',
+    'donor_registrations.json': 'donor_registrations'
 };
 
 // Mapping helpers for Supabase (CamelCase to lowercase)
@@ -60,7 +61,8 @@ const FIELD_MAPPINGS = {
             ...item,
             purchaseUrl: item.purchaseurl,
             pdfFile: item.pdffile,
-            inStock: item.instock
+            inStock: item.instock,
+            createdAt: item.createdat,
         }),
         to: (item) => ({
             id: item.id,
@@ -74,7 +76,8 @@ const FIELD_MAPPINGS = {
             features: item.features,
             quantity: item.quantity,
             status: item.status,
-            instock: item.inStock
+            instock: item.inStock,
+            createdat: item.createdAt,
         })
     },
     'orders': {
@@ -110,6 +113,26 @@ const FIELD_MAPPINGS = {
             date: item.date,
             image: item.image,
             description: item.description
+        })
+    },
+    'donor_registrations': {
+        from: (item) => item,
+        to: (item) => ({
+            id: item.id,
+            name: item.name,
+            email: item.email,
+            phone: item.phone,
+            city: item.city,
+            message: item.message,
+            child_id: item.child_id,
+            child_name: item.child_name,
+            child_age: item.child_age,
+            child_domicile: item.child_domicile,
+            child_image: item.child_image,
+            amount: item.amount,
+            duration: item.duration,
+            total_amount: item.total_amount,
+            submitted_at: item.submitted_at || new Date().toISOString()
         })
     }
 };
@@ -213,6 +236,9 @@ export const saveOrders = (data) => writeData('orders.json', data);
 
 export const getUsers = () => readData('users.json');
 export const saveUsers = (data) => writeData('users.json', data);
+
+export const getDonorRegistrations = () => readData('donor_registrations.json');
+export const saveDonorRegistrations = (data) => writeData('donor_registrations.json', data);
 
 /** Insert a single user (direct to Supabase when available). */
 export async function insertUser(user) {

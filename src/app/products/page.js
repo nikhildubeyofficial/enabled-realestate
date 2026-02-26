@@ -176,7 +176,11 @@ export default function ProductsPage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    {paginatedProducts.map((product, idx) => (
+                    {paginatedProducts.map((product, idx) => {
+                      const isNew = product.createdAt
+                        ? Date.now() - new Date(product.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000
+                        : false;
+                      return (
                       <div
                         key={product._id || product.id || idx}
                         className="group flex flex-col rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 bg-white relative"
@@ -188,9 +192,10 @@ export default function ProductsPage() {
                             className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                             onError={(e) => { e.target.src = '/Girly.png'; }}
                           />
-                          {product.purchaseUrl && (
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
-                            </div>
+                          {isNew && (
+                            <span className="absolute top-2 left-2 bg-[#f0312f] text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-md">
+                              New
+                            </span>
                           )}
                         </div>
                         <div className="flex flex-col flex-grow p-4 gap-2">
@@ -247,7 +252,8 @@ export default function ProductsPage() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
 

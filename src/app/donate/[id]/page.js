@@ -42,7 +42,7 @@ const children = [
         age: 13,
         domicile: 'Yogyakarta, DI Yogyakarta',
         parentsOccupation: 'Ibu sebagai pembantu rumah tangga, Ayah sebagai tukang bangunan',
-        description: 'Putri adalah anak yang cerdas dan memiliki kepedulian tinggi terhadap sesama. Ia sering membantu teman-temannya yang kesulitan dalam belajar. Keluarganya tinggal di daerah pinggiran kota dengan kondisi rumah yang sederhana. Putri sangat membutuhkan dukungan untuk melanjutkan pendidikannya dan mewujudkan impiannya menjadi guru.'
+        description: 'Putri adalah anak yang cerdas dan memiliki kepedulian tinggi terhadap sesama. Ia sering membantu teman-temannya yang kesulitan dalam belajar. Keluarganya tinggal di daerah pinggiran kota dengan kondisi rumah yang sederhana. Putri sangat membutuhkan dukungan untuk melanjutkan pendidikannya dan mewujudukan impiannya menjadi guru.'
     }
 ];
 
@@ -96,7 +96,7 @@ export default function DonatePage() {
         return effectiveAmount >= MIN_AMOUNT && form.name.trim() && form.email.trim() && form.phone.trim();
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const errs = [];
         if (!effectiveAmount || effectiveAmount < MIN_AMOUNT) errs.push(`Minimum donation is ${formatRupiah(MIN_AMOUNT)}`);
@@ -106,19 +106,48 @@ export default function DonatePage() {
         if (errs.length > 0) { setErrors(errs); return; }
 
         setIsSubmitting(true);
-        const durationLabel = duration === '1' ? '1 Month' : duration === '3' ? '3 Months' : duration === '6' ? '6 Months' : duration === '12' ? '12 Months (1 Year)' : 'One-time';
+        setErrors([]);
+
+        const durationLabel = duration === '1' ? '1 Month'
+            : duration === '3' ? '3 Months'
+            : duration === '6' ? '6 Months'
+            : duration === '12' ? '12 Months (1 Year)'
+            : 'One-time';
+
         const totalAmount = duration ? effectiveAmount * parseInt(duration) : effectiveAmount;
 
-        const msg = encodeURIComponent(
-            `New ${duration ? 'RECURRING' : 'ONE-TIME'} donation request for ${child.name} (Age: ${child.age})\n\nDonor Information:\n- Name: ${form.name}\n- Email: ${form.email}\n- Phone: ${form.phone}\n\nDonation Details:\n- Monthly Amount: ${formatRupiah(effectiveAmount)}\n- Duration: ${durationLabel}\n- Total Amount: ${formatRupiah(totalAmount)}\n- Child: ${child.name}`
-        );
+        const payload = {
+            // Donor details
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            // Child details
+            child_id: child.id,
+            child_name: child.name,
+            child_age: child.age,
+            child_domicile: child.domicile,
+            child_image: child.image,
+            // Donation details
+            amount: effectiveAmount,
+            duration: durationLabel,
+            total_amount: totalAmount,
+            submitted_at: new Date().toISOString(),
+        };
 
-        setTimeout(() => {
-            window.open(`https://wa.me/6287784629666?text=${msg}`, '_blank', 'noopener,noreferrer');
+        try {
+            const res = await fetch('/api/donor-registrations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!res.ok) throw new Error('Submission failed');
             setSubmitted(true);
+            setTimeout(() => router.push('/be-a-donor'), 4000);
+        } catch {
+            setErrors(['Something went wrong. Please try again.']);
+        } finally {
             setIsSubmitting(false);
-            setTimeout(() => router.push('/be-a-donor'), 3000);
-        }, 600);
+        }
     };
 
     if (submitted) {
@@ -132,8 +161,8 @@ export default function DonatePage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Donation Request Submitted!</h2>
-                        <p className="text-gray-600">We'll contact you via WhatsApp shortly. Thank you for your generosity!</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Donation Submitted!</h2>
+                        <p className="text-gray-600">Thank you, <strong>{form.name}</strong>! Your donation for <strong>{child.name}</strong> has been recorded. Our team will reach out to you shortly.</p>
                         <p className="text-sm text-gray-400 mt-4">Redirecting you back...</p>
                     </div>
                 </main>
@@ -330,7 +359,7 @@ export default function DonatePage() {
                                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         }`}
                                 >
-                                    {isSubmitting ? 'PROCESSING...' : 'DONATE VIA WHATSAPP'}
+                                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT DONATION'}
                                 </button>
                             </div>
                         </form>
