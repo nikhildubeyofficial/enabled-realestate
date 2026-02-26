@@ -14,6 +14,7 @@ export default function CartPage() {
     cartItems,
     removeFromCart,
     updateQuantity,
+    clearCart,
     cartTotal
   } = useCart();
 
@@ -173,12 +174,24 @@ export default function CartPage() {
                 )}
 
                 {cartItems.length > 0 && (
-                  <button
-                    onClick={() => router.push('/products')}
-                    className="mt-6 w-full md:w-auto border-2 border-gray-100 px-8 py-3 rounded-xl hover:border-gray-900 transition-all font-bold text-gray-700 text-sm"
-                  >
-                    ← Continue Shopping
-                  </button>
+                  <div className="mt-6 flex flex-col sm:flex-row gap-4">
+                    <button
+                      onClick={() => router.push('/products')}
+                      className="flex-1 md:flex-none border-2 border-gray-100 px-8 py-3 rounded-xl hover:border-gray-900 transition-all font-bold text-gray-700 text-sm"
+                    >
+                      ← Continue Shopping
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm("Are you sure you want to empty your cart?")) {
+                          clearCart();
+                        }
+                      }}
+                      className="flex-1 md:flex-none border-2 border-red-50 px-8 py-3 rounded-xl hover:bg-red-50 transition-all font-bold text-red-500 text-sm"
+                    >
+                      Empty Cart
+                    </button>
+                  </div>
                 )}
               </div>
 

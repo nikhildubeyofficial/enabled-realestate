@@ -32,17 +32,50 @@ export function CartProvider({ children }) {
     // Load cart from localStorage when the key changes
     useEffect(() => {
         if (typeof window !== 'undefined') {
+            // 1. Load current key's cart
             const savedCart = localStorage.getItem(cartKey);
+            let currentCart = [];
             if (savedCart) {
                 try {
-                    setCartItems(JSON.parse(savedCart));
+                    currentCart = JSON.parse(savedCart);
                 } catch (e) {
                     console.error('Failed to parse cart:', e);
-                    setCartItems([]);
                 }
-            } else {
-                setCartItems([]);
             }
+
+            // 2. If we are a logged-in user, check if there's a guest cart to merge
+            if (cartKey !== 'enabled_cart_guest') {
+                const guestCartStr = localStorage.getItem('enabled_cart_guest');
+                if (guestCartStr) {
+                    try {
+                        const guestCart = JSON.parse(guestCartStr);
+                        if (guestCart.length > 0) {
+                            console.log('Merging guest cart into user cart...');
+
+                            // Merge logic: append new items, update quantities for existing ones
+                            const mergedCart = [...currentCart];
+                            guestCart.forEach(guestItem => {
+                                const existingIndex = mergedCart.findIndex(item => item.id === guestItem.id);
+                                if (existingIndex > -1) {
+                                    mergedCart[existingIndex].quantity = (mergedCart[existingIndex].quantity || 1) + (guestItem.quantity || 1);
+                                } else {
+                                    mergedCart.push(guestItem);
+                                }
+                            });
+
+                            console.log(`Successfully merged ${guestCart.length} items from guest cart.`);
+                            currentCart = mergedCart;
+                            // Clear guest cart after merging
+                            localStorage.setItem('enabled_cart_guest', JSON.stringify([]));
+                            localStorage.setItem('enabled_cart', JSON.stringify([])); // Also clear legacy key
+                        }
+                    } catch (e) {
+                        console.error('Failed to merge guest cart:', e);
+                    }
+                }
+            }
+
+            setCartItems(currentCart);
             setIsInitialized(true);
         }
     }, [cartKey]);
@@ -51,6 +84,11 @@ export function CartProvider({ children }) {
     useEffect(() => {
         if (isInitialized) {
             localStorage.setItem(cartKey, JSON.stringify(cartItems));
+
+            // Sync to legacy key for compatibility if needed, though we prefer user-specific
+            if (cartKey === 'enabled_cart_guest') {
+                localStorage.setItem('enabled_cart', JSON.stringify(cartItems));
+            }
         }
     }, [cartItems, isInitialized, cartKey]);
 
