@@ -10,15 +10,17 @@ export function CartProvider({ children }) {
 
     // Load cart from localStorage on mount
     useEffect(() => {
-        const savedCart = localStorage.getItem('enabled_cart');
-        if (savedCart) {
-            try {
-                setCartItems(JSON.parse(savedCart));
-            } catch (e) {
-                console.error('Failed to parse cart:', e);
+        if (typeof window !== 'undefined') {
+            const savedCart = localStorage.getItem('enabled_cart');
+            if (savedCart) {
+                try {
+                    setCartItems(JSON.parse(savedCart));
+                } catch (e) {
+                    console.error('Failed to parse cart:', e);
+                }
             }
+            setIsInitialized(true);
         }
-        setIsInitialized(true);
     }, []);
 
     // Sync cart to localStorage on change, but only AFTER initialization

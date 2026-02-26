@@ -1,16 +1,12 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const USERS_FILE = path.join(process.cwd(), 'src/data/users.json');
+import { getUsers } from '@/lib/db';
 
 export async function POST(request) {
     try {
         const { email, password } = await request.json();
 
         // Read users
-        const fileContent = fs.readFileSync(USERS_FILE, 'utf8');
-        const users = JSON.parse(fileContent);
+        const users = await getUsers();
 
         // Find user
         const user = users.find(u => u.email === email && u.password === password);
