@@ -88,37 +88,65 @@ export default function OrdersPage() {
                             </div>
                         ) : (
                             <div className="space-y-6">
-                                {orders.map((order, index) => (
-                                    <div key={order.id || order._id || `order-${index}`} className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center border border-gray-100 rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
-                                        <div className="flex items-start gap-4">
-                                            <img
-                                                src={order.products[0]?.image || "/placeholder.jpg"}
-                                                alt={order.products[0]?.name}
-                                                className="w-20 h-20 object-cover rounded border border-gray-200"
-                                            />
-                                            <div className="flex-1">
-                                                <h3 className="text-lg font-bold text-gray-800 mb-1">
-                                                    {order.address?.fullName || "Order Items"}
+                                {orders.map((order, index) => {
+                                    const items = order.products || order.items || [];
+                                    const itemCount = items.reduce((acc, p) => acc + (p.quantity || 1), 0);
+                                    const orderDate = order.createdAt || order.createdat || order.date;
+                                    const dateLabel = orderDate
+                                        ? new Date(orderDate).toLocaleDateString("en-ID", { day: "numeric", month: "short", year: "numeric" })
+                                        : "Order";
+                                    const previewItems = items.slice(0, 4);
+                                    const productNames = items.map((p) => p.name);
+                                    const summaryText =
+                                        productNames.length <= 2
+                                            ? productNames.join(", ")
+                                            : `${productNames[0]}, ${productNames[1]} +${productNames.length - 2} more`;
+
+                                    return (
+                                        <div
+                                            key={order.id || order._id || `order-${index}`}
+                                            className="flex flex-col border border-gray-100 rounded-lg p-5 bg-white shadow-sm hover:shadow-md transition-shadow"
+                                        >
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h3 className="text-base font-bold text-gray-800">
+                                                    Order · {dateLabel}
                                                 </h3>
-                                                <p className="text-gray-600 text-sm mb-2">
-                                                    {(order.products || order.items || []).map(p => p.name).join(", ")}
-                                                </p>
-                                                <div className="flex gap-4 text-sm text-gray-500">
-                                                    <span>Qty: {(order.products || order.items || []).reduce((acc, p) => acc + (p.quantity || 1), 0)}</span>
-                                                    <span>Total: {formatCurrency(order.totalPrice || order.total || 0)}</span>
-                                                </div>
+                                                <span className="text-sm font-semibold text-gray-700">
+                                                    {itemCount} {itemCount === 1 ? "item" : "items"}
+                                                </span>
+                                            </div>
+                                            <div className="flex gap-2 mb-3 overflow-hidden">
+                                                {previewItems.map((p, i) => (
+                                                    <img
+                                                        key={p.id ?? p._id ?? i}
+                                                        src={p.image || "/placeholder.jpg"}
+                                                        alt=""
+                                                        className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg border border-gray-200 shrink-0"
+                                                    />
+                                                ))}
+                                                {items.length > 4 && (
+                                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg border border-gray-200 bg-gray-100 flex items-center justify-center shrink-0 text-xs font-bold text-gray-500">
+                                                        +{items.length - 4}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <p className="text-gray-600 text-sm mb-3 line-clamp-2" title={productNames.join(", ")}>
+                                                {summaryText}
+                                            </p>
+                                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-3 border-t border-gray-100">
+                                                <span className="text-sm font-semibold text-gray-800">
+                                                    Total: {formatCurrency(order.totalPrice || order.total || 0)}
+                                                </span>
+                                                <button
+                                                    onClick={() => setSelectedOrder(order)}
+                                                    className="w-full sm:w-auto text-[#3455b9] font-semibold hover:underline py-2 text-left sm:text-center min-h-[44px] flex items-center justify-center sm:justify-start"
+                                                >
+                                                    View Details
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-3 w-full md:w-auto">
-                                            <button
-                                                onClick={() => setSelectedOrder(order)}
-                                                className="flex-1 md:flex-none text-[#3455b9] font-semibold hover:underline px-4 py-2"
-                                            >
-                                                View Details
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

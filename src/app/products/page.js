@@ -109,26 +109,30 @@ export default function ProductsPage() {
         {addedToast && (
           <div
             role="alert"
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-[#f0312f] text-white font-bold rounded-xl shadow-lg flex items-center gap-2"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-[#f0312f] text-white text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap max-w-[calc(100vw-2rem)] overflow-hidden text-ellipsis"
           >
-            <span className="w-2 h-2 bg-white rounded-full shrink-0" />
             &quot;{addedToast}&quot; added to cart
           </div>
         )}
         <main className="flex-grow overflow-x-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 pb-16">
             {/* Search and Sort Controls */}
-            <div className="mb-6 flex flex-col sm:flex-row gap-4">
+            <div className="mb-6 flex flex-col sm:flex-row gap-4 w-full">
               <input
                 placeholder="Search by name, category, or description..."
-                className="flex-1 min-h-[44px] p-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] focus:border-[#f0312f] transition-all"
+                className="w-full sm:flex-1 min-h-[44px] px-4 py-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] focus:border-[#f0312f] transition-all"
                 type="text"
                 value={searchTerm}
                 onChange={handleSearch}
                 aria-label="Search products"
               />
               <select
-                className="min-h-[44px] px-4 py-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] bg-white hover:border-[#f0312f] transition-all cursor-pointer"
+                className="w-full sm:w-auto sm:min-w-[140px] min-h-[44px] pl-4 pr-10 py-3 border-2 border-red-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f0312f] bg-white hover:border-[#f0312f] transition-all cursor-pointer appearance-none bg-no-repeat"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23222' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")`,
+                  backgroundSize: '1.25rem',
+                  backgroundPosition: 'right 0.75rem center',
+                }}
                 value={sortOrder}
                 onChange={handleSort}
                 aria-label="Sort products"
